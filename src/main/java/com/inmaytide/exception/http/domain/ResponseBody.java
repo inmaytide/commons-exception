@@ -1,17 +1,21 @@
-package com.inmaytide.exception.http.handler.domain;
+package com.inmaytide.exception.http.domain;
 
 import com.inmaytide.exception.http.HttpResponseException;
+import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class ResponseBody implements Serializable {
 
     private Long timestamp;
 
-    private Integer httpStatus;
+    private HttpStatus status;
 
     private String code;
 
@@ -30,12 +34,12 @@ public class ResponseBody implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Integer getHttpStatus() {
-        return httpStatus;
+    public HttpStatus getStatus() {
+        return status;
     }
 
-    public void setHttpStatus(Integer httpStatus) {
-        this.httpStatus = httpStatus;
+    public void setStatus(HttpStatus status) {
+        this.status = status;
     }
 
     public String getCode() {
@@ -68,13 +72,13 @@ public class ResponseBody implements Serializable {
 
     @Override
     public String toString() {
-        return "{" +
-                String.format("\"timestamp\": \"%s\", ", getTimestamp()) +
-                String.format("\"code\": \"%s\", ", getCode()) +
-                String.format("\"status\": \"%s\", ", getHttpStatus()) +
-                String.format("\"message\": \"%s\", ", getMessage()) +
-                String.format("\"path\": \"%s\"", getUrl()) +
-                "}";
+        List<String> fields = new ArrayList<>(5);
+        fields.add(String.format("\"%s\":%d", "timestamp", getTimestamp()));
+        fields.add(String.format("\"%s\":\"%s\"", "code", getCode()));
+        fields.add(String.format("\"%s\":%d", "status", getStatus().value()));
+        fields.add(String.format("\"%s\":\"%s\"", "message", getMessage()));
+        fields.add(String.format("\"%s\":\"%s\"", "path", getUrl()));
+        return "{" + StringUtils.collectionToDelimitedString(fields, ",") + "}";
     }
 
     public static ResponseBodyBuilder newBuilder() {
@@ -111,13 +115,11 @@ public class ResponseBody implements Serializable {
             ResponseBody instance = new ResponseBody();
             instance.setUrl(this.url);
             instance.setMessage(throwable.getMessage());
-            instance.setHttpStatus(e.getStatus().value());
+            instance.setStatus(e.getStatus());
             instance.setCode(e.getCode());
             instance.setTimestamp(e.getTimestamp());
             return instance;
         }
-
-
     }
 
 }

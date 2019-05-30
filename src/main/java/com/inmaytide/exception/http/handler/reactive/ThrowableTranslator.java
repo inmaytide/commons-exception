@@ -1,6 +1,6 @@
 package com.inmaytide.exception.http.handler.reactive;
 
-import com.inmaytide.exception.http.handler.domain.ResponseBody;
+import com.inmaytide.exception.http.domain.ResponseBody;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,10 +12,10 @@ import static org.springframework.web.reactive.function.server.ServerResponse.st
 
 public class ThrowableTranslator {
 
-    private final ResponseBody throwableResponseBody;
+    private final ResponseBody body;
 
     private ThrowableTranslator(Throwable throwable, String url) {
-        this.throwableResponseBody = ResponseBody.newBuilder().throwable(throwable).url(url).build();
+        this.body = ResponseBody.newBuilder().throwable(throwable).url(url).build();
     }
 
     public static <T extends Throwable> Mono<ThrowableTranslator> translate(final Mono<T> throwable, String path) {
@@ -23,20 +23,17 @@ public class ThrowableTranslator {
     }
 
     public Mono<Void> write(ServerHttpResponse response) {
-        response.setStatusCode(getHttpStatus());
+        response.setStatusCode(body.getStatus());
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON_UTF8);
-        DataBuffer buffer = response.bufferFactory().wrap(throwableResponseBody.asBytes());
+        DataBuffer buffer = response.bufferFactory().wrap(body.asBytes());
         Mono<DataBuffer> mono = Mono.just(buffer);
         return response.writeAndFlushWith(Mono.just(mono));
     }
 
     public Mono<ServerResponse> getResponse() {
-        return status(getHttpStatus())
+        return status(body.getStatus())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .body(Mono.just(throwableResponseBody), ResponseBody.class);
+                .body(Mono.just(body), ResponseBody.class);
     }
 
-    private HttpStatus getHttpStatus() {
-        return HttpStatus.resolve(throwableResponseBody.getHttpStatus());
-    }
 }

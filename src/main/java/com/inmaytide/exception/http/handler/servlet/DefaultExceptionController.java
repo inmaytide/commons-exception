@@ -1,6 +1,6 @@
 package com.inmaytide.exception.http.handler.servlet;
 
-import com.inmaytide.exception.http.handler.domain.ResponseBody;
+import com.inmaytide.exception.http.domain.ResponseBody;
 import com.inmaytide.exception.parser.DefaultThrowableParser;
 import com.inmaytide.exception.parser.ThrowableParser;
 import org.springframework.web.bind.annotation.ExceptionHandler;
