@@ -11,18 +11,35 @@ import org.springframework.web.server.ResponseStatusException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class DefaultThrowableParser implements ThrowableParser {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultThrowableParser.class);
 
-    private static final Map<String, Class<? extends Throwable>> MAPPERS = Map.of(
-            "org.springframework.security.authentication.AuthenticationCredentialsNotFoundException",
-            NotAuthenticatedException.class,
-            "org.springframework.security.oauth2.common.exceptions.InvalidGrantException",
-            BadCredentialsException.class
-    );
+    private static final Map<String, Class<? extends Throwable>> MAPPERS = new ConcurrentHashMap<>();
+
+    static {
+        MAPPERS.put("org.springframework.security.authentication.AuthenticationCredentialsNotFoundException", NotAuthenticatedException.class);
+        MAPPERS.put("org.springframework.security.oauth2.common.exceptions.InvalidGrantException", BadCredentialsException.class);
+        MAPPERS.put("org.springframework.security.authentication.InsufficientAuthenticationException", NotAuthenticatedException.class);
+    }
+
+    public static void register(Map<Class<? extends Throwable>, Class<? extends Throwable>> mappers) {
+        Objects.requireNonNull(mappers);
+        if (mappers.isEmpty()) {
+            return;
+        }
+        mappers.forEach((k, v) -> MAPPERS.put(k.getName(), v));
+    }
+
+    public static void register(Class<? extends Throwable> key, Class<? extends Throwable> mapper) {
+        Objects.requireNonNull(key);
+        Objects.requireNonNull(mapper);
+        MAPPERS.put(key.getName(), mapper);
+    }
 
     @Override
     public Throwable parse(Throwable e) {
