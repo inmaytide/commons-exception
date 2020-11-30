@@ -1,6 +1,6 @@
-package com.inmaytide.exception.http.mapper;
+package com.inmaytide.exception.web.mapper;
 
-import com.inmaytide.exception.http.HttpResponseException;
+import com.inmaytide.exception.web.HttpResponseException;
 import com.inmaytide.exception.translator.ThrowableMapper;
 
 import java.util.Map;

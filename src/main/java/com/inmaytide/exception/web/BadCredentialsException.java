@@ -1,4 +1,4 @@
-package com.inmaytide.exception.http;
+package com.inmaytide.exception.web;
 
 import org.springframework.http.HttpStatus;
 
@@ -15,7 +15,6 @@ public class BadCredentialsException extends HttpResponseException {
     public BadCredentialsException(Throwable cause) {
         super(cause);
     }
-
 
 
     @Override

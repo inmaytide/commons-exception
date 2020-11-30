@@ -1,6 +1,6 @@
-package com.inmaytide.exception.http.translator;
+package com.inmaytide.exception.web.translator;
 
-import com.inmaytide.exception.http.HttpResponseException;
+import com.inmaytide.exception.web.HttpResponseException;
 
 import java.util.Optional;
 

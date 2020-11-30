@@ -1,7 +1,7 @@
-package com.inmaytide.exception.http.mvc;
+package com.inmaytide.exception.web.servlet;
 
-import com.inmaytide.exception.http.HttpResponseException;
-import com.inmaytide.exception.http.domain.Response;
+import com.inmaytide.exception.web.HttpResponseException;
+import com.inmaytide.exception.web.domain.DefaultResponse;
 import com.inmaytide.exception.translator.ThrowableTranslator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +38,7 @@ public class DefaultHandlerExceptionResolver implements HandlerExceptionResolver
         response.setStatus(exception.getDefaultStatus().value());
         response.setHeader("Cache-Control", "no-cache, must-revalidate");
         try {
-            response.getWriter().write(Response.withException(exception).withUrl(path).build().toString());
+            response.getWriter().write(DefaultResponse.withException(exception).withUrl(path).build().toString());
         } catch (IOException e) {
             log.error("Failed to write exception response content, Cause by: ", e);
         }

@@ -1,6 +1,6 @@
-package com.inmaytide.exception.http.domain;
+package com.inmaytide.exception.web.domain;
 
-import com.inmaytide.exception.http.HttpResponseException;
+import com.inmaytide.exception.web.HttpResponseException;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  * @author luomiao
  * @since 2020/11/25
  */
-public class Response implements Serializable {
+public class DefaultResponse implements Serializable {
 
     private Instant timestamp;
 
@@ -31,7 +31,7 @@ public class Response implements Serializable {
 
     private String url;
 
-    private Response() {
+    private DefaultResponse() {
 
     }
 
@@ -93,7 +93,7 @@ public class Response implements Serializable {
 
     @Override
     public String toString() {
-        String values = Stream.of(Response.class.getDeclaredFields())
+        String values = Stream.of(DefaultResponse.class.getDeclaredFields())
                 .peek(f -> f.setAccessible(true))
                 .map(this::fieldValue)
                 .filter(Optional::isPresent)
@@ -147,8 +147,8 @@ public class Response implements Serializable {
             return this;
         }
 
-        public Response build() {
-            Response response = new Response();
+        public DefaultResponse build() {
+            DefaultResponse response = new DefaultResponse();
             response.setUrl(url);
             response.setTimestamp(exception == null ? Instant.now() : exception.getTimestamp());
             response.setCode(StringUtils.hasText(code) ? code : (exception == null ? null : exception.getCode()));

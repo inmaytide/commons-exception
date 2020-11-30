@@ -1,9 +1,9 @@
-package com.inmaytide.exception.http.mapper;
+package com.inmaytide.exception.web.mapper;
 
-import com.inmaytide.exception.http.BadRequestException;
-import com.inmaytide.exception.http.HttpResponseException;
-import com.inmaytide.exception.http.PathNotFoundException;
-import com.inmaytide.exception.http.ServiceUnavailableException;
+import com.inmaytide.exception.web.BadRequestException;
+import com.inmaytide.exception.web.HttpResponseException;
+import com.inmaytide.exception.web.PathNotFoundException;
+import com.inmaytide.exception.web.ServiceUnavailableException;
 import org.springframework.http.HttpStatus;
 
 import java.util.Map;

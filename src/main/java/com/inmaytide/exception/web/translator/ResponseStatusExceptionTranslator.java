@@ -1,7 +1,7 @@
-package com.inmaytide.exception.http.translator;
+package com.inmaytide.exception.web.translator;
 
-import com.inmaytide.exception.http.HttpResponseException;
-import com.inmaytide.exception.http.mapper.ResponseStatusExceptionMapper;
+import com.inmaytide.exception.web.HttpResponseException;
+import com.inmaytide.exception.web.mapper.ResponseStatusExceptionMapper;
 import com.inmaytide.exception.translator.ThrowableMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

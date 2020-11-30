@@ -1,8 +1,8 @@
-package com.inmaytide.exception.http.mapper;
+package com.inmaytide.exception.web.mapper;
 
-import com.inmaytide.exception.http.BadCredentialsException;
-import com.inmaytide.exception.http.BadRequestException;
-import com.inmaytide.exception.http.HttpResponseException;
+import com.inmaytide.exception.web.BadCredentialsException;
+import com.inmaytide.exception.web.BadRequestException;
+import com.inmaytide.exception.web.HttpResponseException;
 
 import java.util.Map;
 import java.util.Objects;
