@@ -16,7 +16,6 @@ public class BadCredentialsException extends HttpResponseException {
         super(cause);
     }
 
-
     @Override
     public HttpStatus getDefaultStatus() {
         return HttpStatus.FORBIDDEN;
