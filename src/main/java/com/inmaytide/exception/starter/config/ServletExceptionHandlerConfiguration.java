@@ -1,10 +1,9 @@
 package com.inmaytide.exception.starter.config;
 
-import com.inmaytide.exception.http.HttpResponseException;
-import com.inmaytide.exception.http.mvc.DefaultHandlerExceptionResolver;
 import com.inmaytide.exception.translator.ThrowableTranslator;
+import com.inmaytide.exception.web.HttpResponseException;
+import com.inmaytide.exception.web.servlet.DefaultHandlerExceptionResolver;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +19,6 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 public class ServletExceptionHandlerConfiguration {
 
     @Bean
-    // @ConditionalOnMissingBean(HandlerExceptionResolver.class)
     public HandlerExceptionResolver exceptionResolver(ThrowableTranslator<HttpResponseException> translator) {
         return new DefaultHandlerExceptionResolver(translator);
     }

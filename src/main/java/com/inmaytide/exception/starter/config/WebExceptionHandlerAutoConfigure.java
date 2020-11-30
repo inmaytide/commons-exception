@@ -1,12 +1,12 @@
 package com.inmaytide.exception.starter.config;
 
-import com.inmaytide.exception.http.HttpResponseException;
-import com.inmaytide.exception.http.translator.HttpResponseExceptionTranslator;
-import com.inmaytide.exception.http.translator.PredictableExceptionTranslator;
-import com.inmaytide.exception.http.translator.ResponseStatusExceptionTranslator;
-import com.inmaytide.exception.http.translator.UnknownExceptionTranslator;
 import com.inmaytide.exception.translator.ThrowableTranslator;
 import com.inmaytide.exception.translator.TranslatorChain;
+import com.inmaytide.exception.web.HttpResponseException;
+import com.inmaytide.exception.web.translator.HttpResponseExceptionTranslator;
+import com.inmaytide.exception.web.translator.PredictableExceptionTranslator;
+import com.inmaytide.exception.web.translator.ResponseStatusExceptionTranslator;
+import com.inmaytide.exception.web.translator.UnknownExceptionTranslator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
