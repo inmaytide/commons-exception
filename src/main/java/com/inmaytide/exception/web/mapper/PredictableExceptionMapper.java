@@ -1,8 +1,7 @@
 package com.inmaytide.exception.web.mapper;
 
-import com.inmaytide.exception.web.BadCredentialsException;
-import com.inmaytide.exception.web.BadRequestException;
-import com.inmaytide.exception.web.HttpResponseException;
+import com.inmaytide.exception.web.*;
+import org.springframework.util.ClassUtils;
 
 import java.util.Map;
 import java.util.Objects;
@@ -23,7 +22,7 @@ public class PredictableExceptionMapper extends AbstractThrowableMapper<Class<? 
 
     private void register(String className, Class<? extends HttpResponseException> target, boolean classRequireFound) {
         try {
-            Class<?> cls = Class.forName(className);
+            Class<?> cls = ClassUtils.forName(className, ClassUtils.getDefaultClassLoader());
             if (isAssignableFromThrowable(cls)) {
                 register((Class<? extends Throwable>) cls, target);
             } else {
@@ -55,5 +54,9 @@ public class PredictableExceptionMapper extends AbstractThrowableMapper<Class<? 
     public PredictableExceptionMapper() {
         register(IllegalArgumentException.class, BadRequestException.class);
         register("org.springframework.security.oauth2.common.exceptions.InvalidGrantException", BadCredentialsException.class, false);
+        register("com.netflix.client.ClientException", ServiceUnavailableException.class, false);
+        register("org.springframework.security.oauth2.common.exceptions.InvalidTokenException", BadCredentialsException.class, false);
+        register("org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionException", UnauthorizedException.class, false);
+        register("org.springframework.security.oauth2.server.resource.introspection.BadOpaqueTokenException", BadCredentialsException.class, false);
     }
 }
