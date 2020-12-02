@@ -32,6 +32,9 @@ public class DefaultExceptionHandler<T extends Response> implements WebException
     public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {
         String path = exchange.getRequest().getPath().pathWithinApplication().value();
         log.error("Handing error: {}, {}, {}", throwable.getClass().getName(), throwable.getMessage(), exchange.getRequest().getMethodValue() + " " + path);
+        if (log.isDebugEnabled()) {
+            log.error("", throwable);
+        }
         HttpResponseException exception = translator.translate(throwable).orElseGet(() -> new HttpResponseException(throwable));
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(exception.getStatus());
