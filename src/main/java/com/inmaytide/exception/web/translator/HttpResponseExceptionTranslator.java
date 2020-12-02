@@ -13,9 +13,9 @@ public class HttpResponseExceptionTranslator extends AbstractHttpExceptionTransl
     public static final int ORDER = 10;
 
     @Override
-    public Optional<HttpResponseException> translate(Throwable throwable) {
-        if (throwable instanceof HttpResponseException) {
-            return Optional.of((HttpResponseException) throwable);
+    public Optional<HttpResponseException> execute(Throwable e) {
+        if (e instanceof HttpResponseException) {
+            return Optional.of((HttpResponseException) e);
         }
         return Optional.empty();
     }

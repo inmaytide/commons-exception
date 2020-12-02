@@ -8,6 +8,10 @@ import org.springframework.http.HttpStatus;
  */
 public class BadRequestException extends HttpResponseException {
 
+    public BadRequestException(String code) {
+        super(code);
+    }
+
     @Override
     public HttpStatus getDefaultStatus() {
         return HttpStatus.BAD_REQUEST;

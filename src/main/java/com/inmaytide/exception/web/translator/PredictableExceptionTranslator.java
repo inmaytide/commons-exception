@@ -1,8 +1,8 @@
 package com.inmaytide.exception.web.translator;
 
+import com.inmaytide.exception.translator.ThrowableMapper;
 import com.inmaytide.exception.web.HttpResponseException;
 import com.inmaytide.exception.web.mapper.PredictableExceptionMapper;
-import com.inmaytide.exception.translator.ThrowableMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,10 +31,9 @@ public class PredictableExceptionTranslator extends AbstractHttpExceptionTransla
     }
 
     @Override
-    public Optional<HttpResponseException> translate(Throwable e) {
+    public Optional<HttpResponseException> execute(Throwable e) {
         return throwableMapper.support(e.getClass()).map(cls -> createInstance(cls, e));
     }
-
 
     @Override
     protected Logger getLogger() {

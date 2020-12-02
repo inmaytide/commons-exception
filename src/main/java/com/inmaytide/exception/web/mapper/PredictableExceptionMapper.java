@@ -58,5 +58,7 @@ public class PredictableExceptionMapper extends AbstractThrowableMapper<Class<? 
         register("org.springframework.security.oauth2.common.exceptions.InvalidTokenException", BadCredentialsException.class, false);
         register("org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionException", UnauthorizedException.class, false);
         register("org.springframework.security.oauth2.server.resource.introspection.BadOpaqueTokenException", BadCredentialsException.class, false);
+        register("org.springframework.security.authentication.AuthenticationCredentialsNotFoundException", UnauthorizedException.class, false);
+        register("org.springframework.security.access.AccessDeniedException", AccessDeniedException.class, false);
     }
 }

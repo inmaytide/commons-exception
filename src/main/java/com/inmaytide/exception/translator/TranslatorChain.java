@@ -17,7 +17,6 @@ public class TranslatorChain<T extends Throwable> implements ThrowableTranslator
     }
 
     public Optional<T> translate(Throwable throwable) {
-        throwable = getCause(throwable);
         for (ThrowableTranslator<T> translator : translators) {
             Optional<T> op = translator.translate(throwable);
             if (op.isPresent()) {
@@ -29,13 +28,6 @@ public class TranslatorChain<T extends Throwable> implements ThrowableTranslator
 
     public void addTranslator(ThrowableTranslator<T> translator) {
         translators.add(translator);
-    }
-
-    protected Throwable getCause(Throwable e) {
-        if (e.getCause() == null) {
-            return e;
-        }
-        return getCause(e.getCause());
     }
 
     @Override

@@ -33,10 +33,10 @@ public class ResponseStatusExceptionTranslator extends AbstractHttpExceptionTran
     }
 
     @Override
-    public Optional<HttpResponseException> translate(Throwable throwable) {
-        if (throwable instanceof ResponseStatusException) {
-            ResponseStatusException exception = (ResponseStatusException) throwable;
-            return throwableMapper.support(exception.getStatus()).map(cls -> super.createInstance(cls, throwable));
+    public Optional<HttpResponseException> execute(Throwable e) {
+        if (e instanceof ResponseStatusException) {
+            ResponseStatusException exception = (ResponseStatusException) e;
+            return throwableMapper.support(exception.getStatus()).map(cls -> super.createInstance(cls, e));
         }
         return Optional.empty();
     }

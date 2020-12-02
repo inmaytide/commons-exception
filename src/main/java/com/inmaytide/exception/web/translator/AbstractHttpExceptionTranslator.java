@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 /**
  * @author luomiao
@@ -15,6 +16,20 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class AbstractHttpExceptionTranslator implements ThrowableTranslator<HttpResponseException> {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractHttpExceptionTranslator.class);
+
+    @Override
+    public Optional<HttpResponseException> translate(Throwable e) {
+        Optional<HttpResponseException> translated = execute(e);
+        if (translated.isPresent()) {
+            return translated;
+        }
+        if (e.getCause() != null) {
+            return translate(e.getCause());
+        }
+        return Optional.empty();
+    }
+
+    protected abstract Optional<HttpResponseException> execute(Throwable e);
 
     protected HttpResponseException createInstance(Class<? extends HttpResponseException> cls, Throwable cause) {
         try {
