@@ -31,7 +31,7 @@ public class DefaultHandlerExceptionResolver implements HandlerExceptionResolver
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object o, Exception throwable) {
         String path = request.getRequestURL().toString();
-        log.error("Handing error: {}, {}, {}", throwable.getClass().getName(), throwable.getMessage(), path);
+        log.error("Handing error: {}, {}, {}", throwable.getClass().getName(), throwable.getMessage(), request.getMethod() + " " + path);
         HttpResponseException exception = translator.translate(throwable).orElseGet(() -> new HttpResponseException(throwable));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
