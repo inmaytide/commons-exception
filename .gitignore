@@ -1,7 +1,14 @@
 HELP.md
+<<<<<<< HEAD
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 .DS_Store
+=======
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+>>>>>>> ces
 
 ### STS ###
 .apt_generated
@@ -24,7 +31,13 @@ HELP.md
 /dist/
 /nbdist/
 /.nb-gradle/
+<<<<<<< HEAD
 /build/
+=======
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+>>>>>>> ces
 
 ### VS Code ###
 .vscode/
