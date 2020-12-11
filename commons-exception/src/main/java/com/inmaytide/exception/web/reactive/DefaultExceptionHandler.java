@@ -1,16 +1,20 @@
 package com.inmaytide.exception.web.reactive;
 
 import com.inmaytide.exception.web.HttpResponseException;
+import com.inmaytide.exception.web.PathNotFoundException;
 import com.inmaytide.exception.web.domain.DefaultResponse;
 import com.inmaytide.exception.translator.ThrowableTranslator;
 import com.inmaytide.exception.web.domain.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebExceptionHandler;
+import org.springframework.web.servlet.function.ServerRequest;
+import org.springframework.web.servlet.function.ServerResponse;
 import reactor.core.publisher.Mono;
 
 
@@ -43,6 +47,13 @@ public class DefaultExceptionHandler<T extends Response> implements WebException
                 .map(Mono::just)
                 .map(Mono::just)
                 .flatMap(response::writeAndFlushWith);
+    }
+
+    public Mono<ServerResponse> pathNotFound(ServerRequest request) {
+        String path = request.requestPath().pathWithinApplication().value();
+        DefaultResponse body = DefaultResponse.withException(new PathNotFoundException()).withUrl(path).build();
+        ServerResponse response = ServerResponse.status(HttpStatus.NOT_FOUND).contentType(MediaType.APPLICATION_JSON).body(body);
+        return Mono.just(response);
     }
 
     @Override

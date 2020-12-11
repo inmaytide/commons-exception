@@ -8,6 +8,10 @@ import org.springframework.http.HttpStatus;
  */
 public class PathNotFoundException extends HttpResponseException {
 
+    public PathNotFoundException() {
+        
+    }
+
     public PathNotFoundException(Throwable e) {
         super(e);
     }
