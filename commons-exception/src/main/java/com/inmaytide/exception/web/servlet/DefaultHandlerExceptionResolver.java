@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * @author luomiao
@@ -37,8 +38,8 @@ public class DefaultHandlerExceptionResolver implements HandlerExceptionResolver
         response.setCharacterEncoding("UTF-8");
         response.setStatus(exception.getDefaultStatus().value());
         response.setHeader("Cache-Control", "no-cache, must-revalidate");
-        try {
-            response.getWriter().write(DefaultResponse.withException(exception).withUrl(path).build().toString());
+        try (OutputStream os = response.getOutputStream()){
+            os.write(DefaultResponse.withException(exception).withUrl(path).build().asBytes());
         } catch (IOException e) {
             log.error("Failed to write exception response content, Cause by: ", e);
         }
