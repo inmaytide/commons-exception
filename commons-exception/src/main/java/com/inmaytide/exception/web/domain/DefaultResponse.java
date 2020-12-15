@@ -1,15 +1,12 @@
 package com.inmaytide.exception.web.domain;
 
 import com.inmaytide.exception.web.HttpResponseException;
-import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,7 +16,7 @@ import java.util.stream.Stream;
  * @author luomiao
  * @since 2020/11/25
  */
-public class DefaultResponse implements Serializable {
+public class DefaultResponse implements Serializable, Response {
 
     private Instant timestamp;
 
@@ -33,14 +30,6 @@ public class DefaultResponse implements Serializable {
 
     private DefaultResponse() {
 
-    }
-
-    public static ResponseBuilder builder() {
-        return new ResponseBuilder();
-    }
-
-    public static ResponseBuilder withException(HttpResponseException e) {
-        return builder().withException(e);
     }
 
     public Instant getTimestamp() {
@@ -83,12 +72,12 @@ public class DefaultResponse implements Serializable {
         this.url = url;
     }
 
-    public byte[] asBytes() {
-        return toString().getBytes(StandardCharsets.UTF_8);
+    public static ResponseBuilder builder() {
+        return new ResponseBuilder();
     }
 
-    public DataBuffer asDataBuffer(DataBufferFactory bufferFactory) {
-        return bufferFactory.wrap(asBytes());
+    public static ResponseBuilder withException(HttpResponseException e) {
+        return builder().withException(e);
     }
 
     @Override

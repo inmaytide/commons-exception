@@ -3,23 +3,25 @@ package com.inmaytide.exception.web;
 import org.springframework.http.HttpStatus;
 
 /**
+ * 请求的服务不可用
+ *
  * @author luomiao
  * @since 2020/11/26
  */
 public class ServiceUnavailableException extends HttpResponseException {
 
-    public ServiceUnavailableException(Throwable e) {
-        super(e);
+    private static final String DEFAULT_CODE = "exception_service_unavailable";
+
+    public ServiceUnavailableException() {
+        super(HttpStatus.SERVICE_UNAVAILABLE, DEFAULT_CODE);
     }
 
-    @Override
-    public HttpStatus getDefaultStatus() {
-        return HttpStatus.SERVICE_UNAVAILABLE;
+    public ServiceUnavailableException(String code) {
+        super(HttpStatus.SERVICE_UNAVAILABLE, code);
     }
 
-    @Override
-    public String getDefaultCode() {
-        return "exception_service_unavailable";
+    public ServiceUnavailableException(Throwable cause) {
+        super(HttpStatus.SERVICE_UNAVAILABLE, DEFAULT_CODE, cause);
     }
 
 }

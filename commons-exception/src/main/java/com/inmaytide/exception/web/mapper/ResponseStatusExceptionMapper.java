@@ -1,9 +1,6 @@
 package com.inmaytide.exception.web.mapper;
 
-import com.inmaytide.exception.web.BadRequestException;
-import com.inmaytide.exception.web.HttpResponseException;
-import com.inmaytide.exception.web.PathNotFoundException;
-import com.inmaytide.exception.web.ServiceUnavailableException;
+import com.inmaytide.exception.web.*;
 import org.springframework.http.HttpStatus;
 
 import java.util.Map;
@@ -24,6 +21,8 @@ public class ResponseStatusExceptionMapper extends AbstractThrowableMapper<HttpS
 
     public ResponseStatusExceptionMapper() {
         register(HttpStatus.NOT_FOUND, PathNotFoundException.class);
+        register(HttpStatus.UNAUTHORIZED, UnauthorizedException.class);
+        register(HttpStatus.FORBIDDEN, AccessDeniedException.class);
         register(HttpStatus.SERVICE_UNAVAILABLE, ServiceUnavailableException.class);
         register(HttpStatus.BAD_REQUEST, BadRequestException.class);
     }

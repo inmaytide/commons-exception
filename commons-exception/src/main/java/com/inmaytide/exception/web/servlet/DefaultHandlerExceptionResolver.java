@@ -36,7 +36,7 @@ public class DefaultHandlerExceptionResolver implements HandlerExceptionResolver
         HttpResponseException exception = translator.translate(throwable).orElseGet(() -> new HttpResponseException(throwable));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
-        response.setStatus(exception.getDefaultStatus().value());
+        response.setStatus(exception.getStatus().value());
         response.setHeader("Cache-Control", "no-cache, must-revalidate");
         try (OutputStream os = response.getOutputStream()){
             os.write(DefaultResponse.withException(exception).withUrl(path).build().asBytes());
