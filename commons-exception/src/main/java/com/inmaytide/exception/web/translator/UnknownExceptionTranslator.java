@@ -9,7 +9,7 @@ import java.util.Optional;
 
 /**
  * 通常放在翻译器链最后<br />
- * 将未知异常转换为HttpResponseException, 并在日志中输出异常详细堆栈
+ * 将不可预知的异常转换为HttpResponseException, 并在日志中输出异常详细堆栈
  *
  * @author luomiao
  * @since 2020/11/26

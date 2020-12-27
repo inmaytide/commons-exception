@@ -1,7 +1,7 @@
 package com.inmaytide.exception.starter.config;
 
 import com.inmaytide.exception.translator.ThrowableTranslator;
-import com.inmaytide.exception.translator.TranslatorChain;
+import com.inmaytide.exception.translator.TranslatorDelegator;
 import com.inmaytide.exception.web.HttpResponseException;
 import com.inmaytide.exception.web.translator.HttpResponseExceptionTranslator;
 import com.inmaytide.exception.web.translator.PredictableExceptionTranslator;
@@ -29,7 +29,7 @@ public class WebExceptionHandlerAutoConfigure {
     @Bean
     @ConditionalOnMissingBean(value = HttpResponseException.class, parameterizedContainer = ThrowableTranslator.class)
     public ThrowableTranslator<HttpResponseException> throwableTranslator() {
-        TranslatorChain<HttpResponseException> chain = new TranslatorChain<>();
+        TranslatorDelegator<HttpResponseException> chain = new TranslatorDelegator<>();
         chain.addTranslator(new HttpResponseExceptionTranslator());
         chain.addTranslator(new ResponseStatusExceptionTranslator());
         chain.addTranslator(new PredictableExceptionTranslator());

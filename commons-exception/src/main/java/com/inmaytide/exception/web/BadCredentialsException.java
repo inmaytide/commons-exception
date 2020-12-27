@@ -3,7 +3,7 @@ package com.inmaytide.exception.web;
 import org.springframework.http.HttpStatus;
 
 /**
- * 登录时账号密码错误或者访问资源时凭证失效错误
+ * 登录时账号密码错误或者访问资源时凭证已失效
  *
  * @author luomiao
  * @since 2020/11/26

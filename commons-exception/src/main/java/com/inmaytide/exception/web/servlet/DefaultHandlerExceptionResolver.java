@@ -30,18 +30,22 @@ public class DefaultHandlerExceptionResolver implements HandlerExceptionResolver
     }
 
     @Override
-    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object o, Exception throwable) {
+    public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object o, Exception e) {
         String path = request.getRequestURL().toString();
-        log.error("Handing error: {}, {}, {}", throwable.getClass().getName(), throwable.getMessage(), request.getMethod() + " " + path);
-        HttpResponseException exception = translator.translate(throwable).orElseGet(() -> new HttpResponseException(throwable));
+        log.error("Handing error: {}, {}, {} {}", e.getClass().getName(), e.getMessage(), request.getMethod(), path);
+        if (log.isDebugEnabled()) {
+            e.printStackTrace();
+            log.error("Exception stack trace: ", e);
+        }
+        HttpResponseException exception = translator.translate(e).orElseGet(() -> new HttpResponseException(e));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
         response.setStatus(exception.getStatus().value());
         response.setHeader("Cache-Control", "no-cache, must-revalidate");
-        try (OutputStream os = response.getOutputStream()){
+        try (OutputStream os = response.getOutputStream()) {
             os.write(DefaultResponse.withException(exception).withUrl(path).build().asBytes());
-        } catch (IOException e) {
-            log.error("Failed to write exception response content, Cause by: ", e);
+        } catch (IOException ioe) {
+            log.error("Failed to write exception response content, Cause by: ", ioe);
         }
         return new ModelAndView();
     }

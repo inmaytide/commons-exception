@@ -9,21 +9,21 @@ import java.util.stream.Collectors;
  * @author luomiao
  * @since 2020/11/26
  */
-public class TranslatorChain<T extends Throwable> implements ThrowableTranslator<T> {
+public class TranslatorDelegator<T extends Throwable> implements ThrowableTranslator<T> {
 
     private List<ThrowableTranslator<T>> translators;
 
-    private boolean chainIsSorted;
+    private boolean innerSorted;
 
-    public TranslatorChain() {
+    public TranslatorDelegator() {
         this.translators = new ArrayList<>();
-        this.chainIsSorted = false;
+        this.innerSorted = false;
     }
 
     public Optional<T> translate(Throwable throwable) {
-        if (!chainIsSorted) {
+        if (!innerSorted) {
             translators = translators.stream().sorted().collect(Collectors.toList());
-            chainIsSorted = true;
+            innerSorted = true;
         }
         return translators.stream().map(translator -> translator.translate(throwable))
                 .filter(Optional::isPresent)
@@ -33,7 +33,7 @@ public class TranslatorChain<T extends Throwable> implements ThrowableTranslator
 
     public void addTranslator(ThrowableTranslator<T> translator) {
         translators.add(translator);
-        chainIsSorted = false;
+        innerSorted = false;
     }
 
     @Override

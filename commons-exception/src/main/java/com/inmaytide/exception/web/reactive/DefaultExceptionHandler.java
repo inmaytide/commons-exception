@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -34,28 +35,33 @@ public class DefaultExceptionHandler implements WebExceptionHandler, Ordered {
 
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {
-        String path = exchange.getRequest().getPath().pathWithinApplication().value();
-        log.error("Handing error: {}, {}, {}", throwable.getClass().getName(), throwable.getMessage(), exchange.getRequest().getMethodValue() + " " + path);
-        if (log.isDebugEnabled()) {
-            log.error("", throwable);
-        }
-        HttpResponseException exception = translator.translate(throwable).orElseGet(() -> new HttpResponseException(throwable));
+        DefaultResponse body = resolve(exchange.getRequest(), throwable);
         ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(exception.getStatus());
-        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-        return Mono.just(DefaultResponse.withException(exception).withUrl(path).build().asDataBuffer(response.bufferFactory()))
+        return Mono.just(body.asDataBuffer(response.bufferFactory()))
                 .map(Mono::just)
                 .map(Mono::just)
                 .flatMap(response::writeAndFlushWith);
     }
 
     public Mono<ServerResponse> pathNotFound(ServerRequest request) {
-        String path = request.path();
-        DefaultResponse body = DefaultResponse.withException(new PathNotFoundException()).withUrl(path).build();
         return ServerResponse
                 .status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(body));
+                .body(BodyInserters.fromValue(DefaultResponse.withException(new PathNotFoundException()).withUrl(request.path()).build()));
+    }
+
+    private DefaultResponse resolve(ServerHttpRequest request, Throwable e) {
+        log.error("Handing error: {}, {}, {} {}", e.getClass().getName(), e.getMessage(), request.getMethodValue(), getPath(request));
+        if (log.isDebugEnabled()) {
+            e.printStackTrace();
+            log.error("Exception stack trace: ", e);
+        }
+        HttpResponseException exception = translator.translate(e).orElseGet(() -> new HttpResponseException(e));
+        return DefaultResponse.withException(exception).withUrl(getPath(request)).build();
+    }
+
+    private String getPath(ServerHttpRequest request) {
+        return request.getPath().pathWithinApplication().value();
     }
 
     @Override
