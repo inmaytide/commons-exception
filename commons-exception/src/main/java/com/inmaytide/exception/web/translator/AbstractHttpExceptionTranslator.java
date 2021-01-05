@@ -41,6 +41,17 @@ public abstract class AbstractHttpExceptionTranslator implements ThrowableTransl
         }
     }
 
+
+    protected HttpResponseException createInstance(Class<? extends HttpResponseException> cls) {
+        try {
+            Constructor<? extends HttpResponseException> constructor = cls.getConstructor();
+            return constructor.newInstance();
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
+            getLogger().warn("Failed to create HttpResponseException, Cause by: ", e);
+            return new HttpResponseException();
+        }
+    }
+
     protected Logger getLogger() {
         return log;
     }

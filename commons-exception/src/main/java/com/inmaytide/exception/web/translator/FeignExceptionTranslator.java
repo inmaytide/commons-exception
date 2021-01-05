@@ -30,7 +30,8 @@ public class FeignExceptionTranslator extends AbstractHttpExceptionTranslator {
     protected Optional<HttpResponseException> execute(Throwable e) {
         if (e instanceof FeignException) {
             FeignException exception = (FeignException) e;
-            return throwableMapper.support(HttpStatus.resolve(exception.status())).map(cls -> super.createInstance(cls, e));
+            log.error("{}: {}", e.getClass().getName(), e.getMessage());
+            return throwableMapper.support(HttpStatus.resolve(exception.status())).map(super::createInstance);
         }
         return Optional.empty();
     }

@@ -75,6 +75,9 @@ public class HttpResponseException extends RuntimeException {
     @Override
     public String getMessage() {
         Throwable cause = getFinallyCause(this);
+        if (cause == this) {
+            return StringUtils.hasText(super.getMessage()) ? super.getMessage() : getStatus().getReasonPhrase();
+        }
         if (StringUtils.hasText(cause.getMessage())) {
             String message = cause.getClass().getName();
             message += ": " + cause.getMessage();
