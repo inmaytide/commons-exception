@@ -37,6 +37,8 @@ public class DefaultExceptionHandler implements WebExceptionHandler, Ordered {
     public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {
         DefaultResponse body = resolve(exchange.getRequest(), throwable);
         ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(body.getStatus());
+        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         return Mono.just(body.asDataBuffer(response.bufferFactory()))
                 .map(Mono::just)
                 .map(Mono::just)
