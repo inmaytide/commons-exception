@@ -18,7 +18,7 @@ public class FeignExceptionTranslator extends AbstractHttpExceptionTranslator {
     private ThrowableMapper<HttpStatus, Class<? extends HttpResponseException>> throwableMapper;
 
     public FeignExceptionTranslator() {
-        throwableMapper = new ResponseStatusExceptionMapper();
+        throwableMapper = ResponseStatusExceptionMapper.getInstance();
     }
 
     public FeignExceptionTranslator(ThrowableMapper<HttpStatus, Class<? extends HttpResponseException>> throwableMapper) {

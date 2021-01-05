@@ -14,17 +14,23 @@ public class ResponseStatusExceptionMapper extends AbstractThrowableMapper<HttpS
 
     private static final Map<HttpStatus, Class<? extends HttpResponseException>> CONTAINER = new ConcurrentHashMap<>();
 
+    private static final ResponseStatusExceptionMapper INSTANT = new ResponseStatusExceptionMapper();
+
     @Override
     protected Map<HttpStatus, Class<? extends HttpResponseException>> getContainer() {
         return CONTAINER;
     }
 
-    public ResponseStatusExceptionMapper() {
+    private ResponseStatusExceptionMapper() {
         register(HttpStatus.NOT_FOUND, PathNotFoundException.class);
         register(HttpStatus.UNAUTHORIZED, UnauthorizedException.class);
         register(HttpStatus.FORBIDDEN, AccessDeniedException.class);
         register(HttpStatus.SERVICE_UNAVAILABLE, ServiceUnavailableException.class);
         register(HttpStatus.BAD_REQUEST, BadRequestException.class);
+    }
+
+    public static ResponseStatusExceptionMapper getInstance() {
+        return INSTANT;
     }
 
 }

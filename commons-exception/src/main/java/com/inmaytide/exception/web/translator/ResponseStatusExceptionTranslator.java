@@ -24,7 +24,7 @@ public class ResponseStatusExceptionTranslator extends AbstractHttpExceptionTran
     private ThrowableMapper<HttpStatus, Class<? extends HttpResponseException>> throwableMapper;
 
     public ResponseStatusExceptionTranslator() {
-        throwableMapper = new ResponseStatusExceptionMapper();
+        throwableMapper = ResponseStatusExceptionMapper.getInstance();
     }
 
     public ResponseStatusExceptionTranslator(ThrowableMapper<HttpStatus, Class<? extends HttpResponseException>> throwableMapper) {
