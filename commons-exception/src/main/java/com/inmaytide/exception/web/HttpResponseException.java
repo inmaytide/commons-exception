@@ -74,17 +74,20 @@ public class HttpResponseException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        if (StringUtils.hasText(super.getMessage())) {
-            return super.getMessage();
-        }
-        if (getCause() != null) {
-            String message = getCause().getClass().getName();
-            if (StringUtils.hasText(getCause().getMessage())) {
-                message += ": " + getCause().getMessage();
-            }
+        Throwable cause = getFinallyCause(this);
+        if (StringUtils.hasText(cause.getMessage())) {
+            String message = cause.getClass().getName();
+            message += ": " + cause.getMessage();
             return message;
         }
         return getStatus().getReasonPhrase();
+    }
+
+    public static Throwable getFinallyCause(Throwable e) {
+        if (e.getCause() == null) {
+            return e;
+        }
+        return getFinallyCause(e.getCause());
     }
 
 
