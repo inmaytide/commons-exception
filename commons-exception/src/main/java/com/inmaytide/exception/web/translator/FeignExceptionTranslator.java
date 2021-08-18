@@ -13,9 +13,9 @@ import java.util.Optional;
 
 public class FeignExceptionTranslator extends AbstractHttpExceptionTranslator {
 
-    private static final Logger log = LoggerFactory.getLogger(ResponseStatusExceptionTranslator.class);
+    private static final Logger log = LoggerFactory.getLogger(FeignExceptionTranslator.class);
 
-    private ThrowableMapper<HttpStatus, Class<? extends HttpResponseException>> throwableMapper;
+    private final ThrowableMapper<HttpStatus, Class<? extends HttpResponseException>> throwableMapper;
 
     public FeignExceptionTranslator() {
         throwableMapper = ResponseStatusExceptionMapper.getInstance();
@@ -30,7 +30,6 @@ public class FeignExceptionTranslator extends AbstractHttpExceptionTranslator {
     protected Optional<HttpResponseException> execute(Throwable e) {
         if (e instanceof FeignException) {
             FeignException exception = (FeignException) e;
-            log.error("{}: {}", e.getClass().getName(), e.getMessage());
             return throwableMapper.support(HttpStatus.resolve(exception.status())).map(super::createInstance);
         }
         return Optional.empty();
