@@ -77,29 +77,18 @@ public class DefaultResponse implements Serializable, Response {
     }
 
     public static ResponseBuilder withException(HttpResponseException e) {
-        return builder().withException(e);
+        return builder().exception(e);
     }
 
     @Override
     public String toString() {
-        String values = Stream.of(DefaultResponse.class.getDeclaredFields())
-                .peek(f -> f.setAccessible(true))
-                .map(this::fieldValue)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.joining(","));
-        return "{" + values + "}";
-    }
-
-    private Optional<String> fieldValue(Field field) {
-        Object value = ReflectionUtils.getField(field, this);
-        if (value == null) {
-            return Optional.empty();
-        }
-        if (value instanceof HttpStatus) {
-            return Optional.of(String.format("\"%s\":%d", field.getName(), ((HttpStatus) value).value()));
-        }
-        return Optional.of(String.format("\"%s\": \"%s\"", field.getName(), value));
+        return "DefaultResponse{" +
+                "timestamp=" + timestamp +
+                ", status=" + status +
+                ", code='" + code + '\'' +
+                ", message='" + message + '\'' +
+                ", url='" + url + '\'' +
+                '}';
     }
 
     public static class ResponseBuilder {
@@ -116,22 +105,22 @@ public class DefaultResponse implements Serializable, Response {
 
         }
 
-        public ResponseBuilder withException(HttpResponseException e) {
+        public ResponseBuilder exception(HttpResponseException e) {
             this.exception = e;
             return this;
         }
 
-        public ResponseBuilder withUrl(String url) {
+        public ResponseBuilder URL(String url) {
             this.url = url;
             return this;
         }
 
-        public ResponseBuilder withMessage(String message) {
+        public ResponseBuilder message(String message) {
             this.message = message;
             return this;
         }
 
-        public ResponseBuilder withCode(String code) {
+        public ResponseBuilder code(String code) {
             this.code = code;
             return this;
         }

@@ -43,7 +43,7 @@ public class DefaultHandlerExceptionResolver implements HandlerExceptionResolver
         response.setStatus(exception.getStatus().value());
         response.setHeader("Cache-Control", "no-cache, must-revalidate");
         try (OutputStream os = response.getOutputStream()) {
-            os.write(DefaultResponse.withException(exception).withUrl(path).build().asBytes());
+            os.write(DefaultResponse.withException(exception).URL(path).build().asBytes());
         } catch (IOException ioe) {
             log.error("Failed to write exception response content, Cause by: ", ioe);
         }

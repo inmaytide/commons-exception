@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.lang.NonNull;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -45,21 +46,20 @@ public class DefaultExceptionHandler implements WebExceptionHandler, Ordered {
                 .flatMap(response::writeAndFlushWith);
     }
 
-    public Mono<ServerResponse> pathNotFound(ServerRequest request) {
+    public Mono<ServerResponse> pathNotFound(@NonNull ServerRequest request) {
         return ServerResponse
                 .status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(DefaultResponse.withException(new PathNotFoundException()).withUrl(request.path()).build()));
+                .body(BodyInserters.fromValue(DefaultResponse.withException(new PathNotFoundException()).URL(request.path()).build()));
     }
 
     private DefaultResponse resolve(ServerHttpRequest request, Throwable e) {
         log.error("Handing error: {}, {}, {} {}", e.getClass().getName(), e.getMessage(), request.getMethodValue(), getPath(request));
         if (log.isDebugEnabled()) {
-            e.printStackTrace();
             log.error("Exception stack trace: ", e);
         }
         HttpResponseException exception = translator.translate(e).orElseGet(() -> new HttpResponseException(e));
-        return DefaultResponse.withException(exception).withUrl(getPath(request)).build();
+        return DefaultResponse.withException(exception).URL(getPath(request)).build();
     }
 
     private String getPath(ServerHttpRequest request) {
