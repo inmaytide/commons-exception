@@ -82,13 +82,19 @@ public class DefaultResponse implements Serializable, Response {
 
     @Override
     public String toString() {
-        return "DefaultResponse{" +
-                "timestamp=" + timestamp +
-                ", status=" + status +
-                ", code='" + code + '\'' +
-                ", message='" + message + '\'' +
-                ", url='" + url + '\'' +
-                '}';
+        String values = Stream.of(DefaultResponse.class.getDeclaredFields()).peek(f -> f.setAccessible(true)).map(this::fieldValue).filter(Optional::isPresent).map(Optional::get).collect(Collectors.joining(","));
+        return "{" + values + "}";
+    }
+
+    private Optional<String> fieldValue(Field field) {
+        Object value = ReflectionUtils.getField(field, this);
+        if (value == null) {
+            return Optional.empty();
+        }
+        if (value instanceof HttpStatus) {
+            return Optional.of(String.format("\"%s\":%d", field.getName(), ((HttpStatus) value).value()));
+        }
+        return Optional.of(String.format("\"%s\": \"%s\"", field.getName(), value));
     }
 
     public static class ResponseBuilder {
