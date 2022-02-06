@@ -2,6 +2,7 @@ package com.inmaytide.exception.starter.config;
 
 import com.inmaytide.exception.translator.ThrowableTranslator;
 import com.inmaytide.exception.translator.TranslatorDelegator;
+import com.inmaytide.exception.util.ApplicationContextHolder;
 import com.inmaytide.exception.web.HttpResponseException;
 import com.inmaytide.exception.web.translator.*;
 import org.slf4j.Logger;
@@ -41,6 +42,11 @@ public class WebExceptionHandlerAutoConfigure {
         }
         log.info("Default \"HttpResponseException\" translator is created.");
         return chain;
+    }
+
+    @Bean(name = "appContextHolder")
+    public ApplicationContextHolder applicationContextHolder() {
+        return new ApplicationContextHolder();
     }
 
 

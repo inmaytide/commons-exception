@@ -2,6 +2,7 @@ package com.inmaytide.exception.web.translator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inmaytide.exception.translator.ThrowableMapper;
+import com.inmaytide.exception.util.ApplicationContextHolder;
 import com.inmaytide.exception.web.BadRequestException;
 import com.inmaytide.exception.web.HttpResponseException;
 import com.inmaytide.exception.web.domain.DefaultResponse;
@@ -36,7 +37,7 @@ public class FeignExceptionTranslator extends AbstractHttpExceptionTranslator {
                 FeignException.BadRequest exception = (FeignException.BadRequest) e;
                 if (exception.responseBody().isPresent()) {
                     try {
-                        DefaultResponse response = new ObjectMapper().readerFor(DefaultResponse.class).readValue(exception.responseBody().get().array());
+                        DefaultResponse response = ApplicationContextHolder.getInstance().getBean(ObjectMapper.class).readerFor(DefaultResponse.class).readValue(exception.responseBody().get().array());
                         return Optional.of(new BadRequestException(response.getCode()));
                     } catch (Exception ignored) {
 
