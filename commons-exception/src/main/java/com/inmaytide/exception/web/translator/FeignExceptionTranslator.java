@@ -1,7 +1,10 @@
 package com.inmaytide.exception.web.translator;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inmaytide.exception.translator.ThrowableMapper;
+import com.inmaytide.exception.web.BadRequestException;
 import com.inmaytide.exception.web.HttpResponseException;
+import com.inmaytide.exception.web.domain.DefaultResponse;
 import com.inmaytide.exception.web.mapper.ResponseStatusExceptionMapper;
 import feign.FeignException;
 import org.slf4j.Logger;
@@ -29,6 +32,17 @@ public class FeignExceptionTranslator extends AbstractHttpExceptionTranslator {
     @Override
     protected Optional<HttpResponseException> execute(Throwable e) {
         if (e instanceof FeignException) {
+            if (e instanceof FeignException.BadRequest) {
+                FeignException.BadRequest exception = (FeignException.BadRequest) e;
+                if (exception.responseBody().isPresent()) {
+                    try {
+                        DefaultResponse response = new ObjectMapper().readerFor(DefaultResponse.class).readValue(exception.responseBody().get().array());
+                        return Optional.of(new BadRequestException(response.getCode()));
+                    } catch (Exception ignored) {
+
+                    }
+                }
+            }
             FeignException exception = (FeignException) e;
             return throwableMapper.support(HttpStatus.resolve(exception.status())).map(super::createInstance);
         }

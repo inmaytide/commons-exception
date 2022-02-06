@@ -15,6 +15,9 @@ public abstract class AbstractThrowableMapper<K> implements ThrowableMapper<K, C
 
     @Override
     public Optional<Class<? extends HttpResponseException>> support(K key) {
+        if (key == null) {
+            return Optional.empty();
+        }
         return Optional.ofNullable(getContainer().get(key));
     }
 
