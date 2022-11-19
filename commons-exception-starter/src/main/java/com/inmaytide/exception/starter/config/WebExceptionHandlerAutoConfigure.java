@@ -24,7 +24,7 @@ public class WebExceptionHandlerAutoConfigure {
 
     private static final Logger log = LoggerFactory.getLogger(WebExceptionHandlerAutoConfigure.class);
 
-    private static final String CLASS_NAME_FEGIN_EX = "feign.FeignException";
+    private static final String CLASS_NAME_FEIGN_EX = "feign.FeignException";
 
     @Bean
     @ConditionalOnMissingBean(value = HttpResponseException.class, parameterizedContainer = ThrowableTranslator.class)
@@ -35,10 +35,10 @@ public class WebExceptionHandlerAutoConfigure {
         chain.addTranslator(new PredictableExceptionTranslator());
         chain.addTranslator(new UnknownExceptionTranslator());
         try {
-            Class.forName(CLASS_NAME_FEGIN_EX);
+            Class.forName(CLASS_NAME_FEIGN_EX);
             chain.addTranslator(new FeignExceptionTranslator());
         } catch (ClassNotFoundException e) {
-            log.debug("\"{}\" is not found, \"FeignExceptionTranslator\" is not initialized", CLASS_NAME_FEGIN_EX);
+            log.debug("\"{}\" is not found, \"FeignExceptionTranslator\" is not initialized", CLASS_NAME_FEIGN_EX);
         }
         log.info("Default \"HttpResponseException\" translator is created.");
         return chain;
