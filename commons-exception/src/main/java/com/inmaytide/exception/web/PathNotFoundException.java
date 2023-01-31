@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
  */
 public class PathNotFoundException extends HttpResponseException {
 
+    private static final long serialVersionUID = 4610677337078978200L;
+
     private static final String DEFAULT_CODE = "exception_path_notfound";
 
     public PathNotFoundException() {

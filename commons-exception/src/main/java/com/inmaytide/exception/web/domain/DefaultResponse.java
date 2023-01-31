@@ -16,7 +16,9 @@ import java.util.stream.Stream;
  * @author luomiao
  * @since 2020/11/25
  */
-public class DefaultResponse implements Serializable, Response {
+public class DefaultResponse implements Response {
+
+    private static final long serialVersionUID = -7223558303498061347L;
 
     private Instant timestamp;
 

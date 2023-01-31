@@ -11,6 +11,8 @@ import java.time.Instant;
  */
 public class HttpResponseException extends RuntimeException {
 
+    private static final long serialVersionUID = 7884478623283660662L;
+
     private final static HttpStatus DEFAULT_STATUS = HttpStatus.INTERNAL_SERVER_ERROR;
 
     private final static String DEFAULT_CODE = "exception_unknown";

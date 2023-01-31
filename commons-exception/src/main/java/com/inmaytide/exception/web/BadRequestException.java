@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
  */
 public class BadRequestException extends HttpResponseException {
 
+    private static final long serialVersionUID = -6499317868370748373L;
+
     private static final String DEFAULT_CODE = "exception_bad_request";
 
     public BadRequestException() {

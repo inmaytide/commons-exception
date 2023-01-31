@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
  */
 public class ObjectNotFoundException extends HttpResponseException {
 
+    private static final long serialVersionUID = 2741299313015836267L;
+
     private static final String DEFAULT_CODE = "exception_obj_notfound";
 
     public ObjectNotFoundException() {

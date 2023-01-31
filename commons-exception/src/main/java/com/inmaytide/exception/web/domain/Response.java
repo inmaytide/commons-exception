@@ -3,13 +3,14 @@ package com.inmaytide.exception.web.domain;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
 /**
  * @author luomiao
  * @since 2020/11/30
  */
-public interface Response {
+public interface Response extends Serializable {
 
     default byte[] asBytes() {
         return toString().getBytes(StandardCharsets.UTF_8);

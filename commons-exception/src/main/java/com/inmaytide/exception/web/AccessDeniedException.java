@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
  */
 public class AccessDeniedException extends HttpResponseException {
 
+    private static final long serialVersionUID = -1949945016002669108L;
+    
     private static final String DEFAULT_CODE = "exception_access_denied";
 
     public AccessDeniedException() {

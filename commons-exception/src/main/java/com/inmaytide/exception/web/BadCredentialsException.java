@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
  */
 public class BadCredentialsException extends HttpResponseException {
 
+    private static final long serialVersionUID = 3394677497571389704L;
+
     private static final String DEFAULT_CODE = "exception_bad_credentials";
 
     public BadCredentialsException() {

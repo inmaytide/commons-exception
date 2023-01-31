@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
  */
 public class ServiceUnavailableException extends HttpResponseException {
 
+    private static final long serialVersionUID = -372994981996874593L;
+
     private static final String DEFAULT_CODE = "exception_service_unavailable";
 
     public ServiceUnavailableException() {

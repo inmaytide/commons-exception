@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
  */
 public class UnauthorizedException extends HttpResponseException {
 
+    private static final long serialVersionUID = -8125873136146325022L;
+
     private static final String DEFAULT_CODE = "exception_unauthorized";
 
     public UnauthorizedException() {
