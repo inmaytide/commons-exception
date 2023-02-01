@@ -3,6 +3,8 @@ package com.inmaytide.exception.web.servlet;
 import com.inmaytide.exception.web.HttpResponseException;
 import com.inmaytide.exception.web.domain.DefaultResponse;
 import com.inmaytide.exception.translator.ThrowableTranslator;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -10,8 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 

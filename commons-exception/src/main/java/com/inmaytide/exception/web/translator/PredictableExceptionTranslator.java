@@ -26,8 +26,7 @@ public class PredictableExceptionTranslator extends AbstractHttpExceptionTransla
     }
 
     private PredictableExceptionTranslator(ThrowableMapper<Class<? extends Throwable>, Class<? extends HttpResponseException>> throwableMapper) {
-        Objects.requireNonNull(throwableMapper);
-        this.throwableMapper = throwableMapper;
+        this.throwableMapper = Objects.requireNonNull(throwableMapper);
     }
 
     @Override

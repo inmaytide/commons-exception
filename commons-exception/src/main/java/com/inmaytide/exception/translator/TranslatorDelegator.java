@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/26
  */
 public class TranslatorDelegator<T extends Throwable> implements ThrowableTranslator<T> {

@@ -5,7 +5,7 @@ import com.inmaytide.exception.web.HttpResponseException;
 import java.util.Optional;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/26
  */
 public class HttpResponseExceptionTranslator extends AbstractHttpExceptionTranslator {

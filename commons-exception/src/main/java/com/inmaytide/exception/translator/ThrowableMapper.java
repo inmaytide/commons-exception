@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/26
  */
 public interface ThrowableMapper<K, T extends Class<? extends Throwable>> {
@@ -15,12 +15,8 @@ public interface ThrowableMapper<K, T extends Class<? extends Throwable>> {
 
     void register(K key, T target);
 
-    default void register(String key, T target) {
-        throw new UnsupportedOperationException();
-    }
+    void register(String key, T target);
 
-    default void replace(K key, T target) {
-        throw new UnsupportedOperationException();
-    }
+    void replace(K key, T target);
 
 }
