@@ -21,24 +21,18 @@ import reactor.core.publisher.Mono;
 
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/25
  */
-public class DefaultExceptionHandler implements WebExceptionHandler, Ordered {
+public record DefaultExceptionHandler(ThrowableTranslator<HttpResponseException> translator) implements WebExceptionHandler, Ordered {
 
     private static final Logger log = LoggerFactory.getLogger(DefaultExceptionHandler.class);
-
-    public final ThrowableTranslator<HttpResponseException> translator;
-
-    public DefaultExceptionHandler(ThrowableTranslator<HttpResponseException> translator) {
-        this.translator = translator;
-    }
 
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, Throwable throwable) {
         DefaultResponse body = resolve(exchange.getRequest(), throwable);
         ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(body.getStatus());
+        response.setStatusCode(HttpStatus.resolve(body.getStatus()));
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         return Mono.just(body.asDataBuffer(response.bufferFactory()))
                 .map(Mono::just)
@@ -54,7 +48,7 @@ public class DefaultExceptionHandler implements WebExceptionHandler, Ordered {
     }
 
     private DefaultResponse resolve(ServerHttpRequest request, Throwable e) {
-        log.error("Handing error: {}, {}, {} {}", e.getClass().getName(), e.getMessage(), request.getMethodValue(), getPath(request));
+        log.error("Handing error: {}, {}, {} {}", e.getClass().getName(), e.getMessage(), request.getMethod().name(), getPath(request));
         if (log.isDebugEnabled()) {
             log.error("Exception stack trace: ", e);
         }

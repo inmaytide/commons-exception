@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/30
  */
 public interface Response extends Serializable {

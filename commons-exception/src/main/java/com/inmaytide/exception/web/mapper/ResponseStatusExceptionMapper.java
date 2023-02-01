@@ -2,22 +2,23 @@ package com.inmaytide.exception.web.mapper;
 
 import com.inmaytide.exception.web.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/26
  */
-public class ResponseStatusExceptionMapper extends AbstractThrowableMapper<HttpStatus> {
+public class ResponseStatusExceptionMapper extends AbstractThrowableMapper<HttpStatusCode> {
 
-    private static final Map<HttpStatus, Class<? extends HttpResponseException>> CONTAINER = new ConcurrentHashMap<>();
+    private static final Map<HttpStatusCode, Class<? extends HttpResponseException>> CONTAINER = new ConcurrentHashMap<>();
 
     private static final ResponseStatusExceptionMapper INSTANT = new ResponseStatusExceptionMapper();
 
     @Override
-    protected Map<HttpStatus, Class<? extends HttpResponseException>> getContainer() {
+    protected Map<HttpStatusCode, Class<? extends HttpResponseException>> getContainer() {
         return CONTAINER;
     }
 

@@ -5,30 +5,37 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.io.Serializable;
+import java.io.Serial;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/25
  */
 public class DefaultResponse implements Response {
 
+    @Serial
     private static final long serialVersionUID = -7223558303498061347L;
 
     private Instant timestamp;
 
-    private HttpStatus status;
+    private Integer status;
 
     private String code;
 
     private String message;
 
     private String url;
+
+    private List<String> placeholders;
 
     private DefaultResponse() {
 
@@ -42,11 +49,11 @@ public class DefaultResponse implements Response {
         this.timestamp = timestamp;
     }
 
-    public HttpStatus getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(HttpStatus status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -74,6 +81,14 @@ public class DefaultResponse implements Response {
         this.url = url;
     }
 
+    public List<String> getPlaceholders() {
+        return placeholders;
+    }
+
+    public void setPlaceholders(List<String> placeholders) {
+        this.placeholders = placeholders;
+    }
+
     public static ResponseBuilder builder() {
         return new ResponseBuilder();
     }
@@ -84,7 +99,12 @@ public class DefaultResponse implements Response {
 
     @Override
     public String toString() {
-        String values = Stream.of(DefaultResponse.class.getDeclaredFields()).peek(f -> f.setAccessible(true)).map(this::fieldValue).filter(Optional::isPresent).map(Optional::get).collect(Collectors.joining(","));
+        String values = Stream.of(DefaultResponse.class.getDeclaredFields())
+                .peek(AccessibleObject::trySetAccessible)
+                .map(this::fieldValue)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.joining(","));
         return "{" + values + "}";
     }
 
@@ -96,6 +116,15 @@ public class DefaultResponse implements Response {
         if (value instanceof HttpStatus) {
             return Optional.of(String.format("\"%s\":%d", field.getName(), ((HttpStatus) value).value()));
         }
+        if (value instanceof List<?> values) {
+            return Optional.of(
+                    String.format(
+                            "\"%s\":%s",
+                            field.getName(),
+                            "[" + values.stream().map(e -> Objects.toString(e, "")).collect(Collectors.joining("\", \"")) + "]"
+                    )
+            );
+        }
         return Optional.of(String.format("\"%s\": \"%s\"", field.getName(), value));
     }
 
@@ -106,6 +135,8 @@ public class DefaultResponse implements Response {
         private String url;
 
         private String message;
+
+        private List<String> placeholders;
 
         private String code;
 
@@ -133,13 +164,19 @@ public class DefaultResponse implements Response {
             return this;
         }
 
+        public ResponseBuilder placeholders(String... placeholders) {
+            this.placeholders = Arrays.asList(placeholders);
+            return this;
+        }
+
         public DefaultResponse build() {
             DefaultResponse response = new DefaultResponse();
             response.setUrl(url);
             response.setTimestamp(exception == null ? Instant.now() : exception.getTimestamp());
             response.setCode(StringUtils.hasText(code) ? code : (exception == null ? null : exception.getCode()));
             response.setMessage(StringUtils.hasText(message) ? message : (exception == null ? null : exception.getMessage()));
-            response.setStatus(exception == null ? HttpStatus.INTERNAL_SERVER_ERROR : exception.getStatus());
+            response.setStatus(exception == null ? HttpStatus.INTERNAL_SERVER_ERROR.value() : exception.getStatus().value());
+            response.setPlaceholders(exception == null ? placeholders : Arrays.asList(exception.getPlaceholders()));
             return response;
         }
     }

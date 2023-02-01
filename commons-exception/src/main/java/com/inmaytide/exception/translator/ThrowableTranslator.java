@@ -5,7 +5,7 @@ import org.springframework.core.Ordered;
 import java.util.Optional;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/25
  */
 public interface ThrowableTranslator<T extends Throwable> extends Ordered, Comparable<ThrowableTranslator<T>> {

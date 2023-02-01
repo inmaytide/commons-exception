@@ -31,12 +31,20 @@ public abstract class AbstractThrowableMapper<K> implements ThrowableMapper<K, C
 
     @Override
     public void register(K key, Class<? extends HttpResponseException> target) {
-        Objects.requireNonNull(key);
-        Objects.requireNonNull(target);
-        if (getContainer().containsKey(key)) {
-            throw new IllegalArgumentException(String.format("The mapping relationship already exists, %s", key.toString()));
+        if (getContainer().containsKey(Objects.requireNonNull(key))) {
+            throw new IllegalArgumentException(String.format("The mapping relationship already exists, %s", key));
         }
-        getContainer().put(key, target);
+        getContainer().put(key, Objects.requireNonNull(target));
+    }
+
+    @Override
+    public void register(String key, Class<? extends HttpResponseException> target) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void replace(K key, Class<? extends HttpResponseException> target) {
+        getContainer().replace(key, Objects.requireNonNull(target));
     }
 
     protected abstract Map<K, Class<? extends HttpResponseException>> getContainer();

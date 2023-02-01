@@ -4,10 +4,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/09
  */
 public class ApplicationContextHolder implements ApplicationContextAware {
@@ -19,14 +18,14 @@ public class ApplicationContextHolder implements ApplicationContextAware {
     public ApplicationContextHolder() {
         // 限制创建ApplicationContextHolder实例，保证单例
         if (INSTANCE != null) {
-            throw new IllegalStateException();
+            throw new UnsupportedOperationException();
         }
         INSTANCE = this;
     }
 
     public static ApplicationContextHolder getInstance() {
         if (INSTANCE == null) {
-            throw new NullPointerException();
+            throw new IllegalStateException();
         }
         return INSTANCE;
     }
