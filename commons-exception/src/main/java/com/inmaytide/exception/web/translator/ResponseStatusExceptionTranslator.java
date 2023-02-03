@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/26
  */
 public class ResponseStatusExceptionTranslator extends AbstractHttpExceptionTranslator {

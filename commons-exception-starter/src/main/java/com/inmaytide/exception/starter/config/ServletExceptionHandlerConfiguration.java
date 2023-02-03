@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/26
  */
 @Configuration(proxyBeanMethods = false)

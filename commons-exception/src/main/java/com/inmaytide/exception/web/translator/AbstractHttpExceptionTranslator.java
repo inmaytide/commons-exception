@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/26
  */
 public abstract class AbstractHttpExceptionTranslator implements ThrowableTranslator<HttpResponseException> {

@@ -9,10 +9,7 @@ import java.io.Serial;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -113,17 +110,12 @@ public class DefaultResponse implements Response {
         if (value == null) {
             return Optional.empty();
         }
-        if (value instanceof HttpStatus) {
-            return Optional.of(String.format("\"%s\":%d", field.getName(), ((HttpStatus) value).value()));
+        if (value instanceof HttpStatus converted) {
+            value = converted.value();
         }
-        if (value instanceof List<?> values) {
-            return Optional.of(
-                    String.format(
-                            "\"%s\":%s",
-                            field.getName(),
-                            "[" + values.stream().map(e -> Objects.toString(e, "")).collect(Collectors.joining("\", \"")) + "]"
-                    )
-            );
+        if (value instanceof Collection<?> converted) {
+            String values = converted.stream().map(e -> Objects.toString(e, "")).map(s -> "\"" + s + "\"").collect(Collectors.joining(", "));
+            value = "[" + values + "]";
         }
         return Optional.of(String.format("\"%s\": \"%s\"", field.getName(), value));
     }

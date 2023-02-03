@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 public class RequirePlaceholdersTest {
 
     @Test
-    public void test() {
+    public void testRegMatches() {
         Assertions.assertFalse(ErrorCode.REQUIRE_PLACEHOLDERS.matcher("上传的文件大小超过服务器限制").find());
 
         Matcher matcher = ErrorCode.REQUIRE_PLACEHOLDERS.matcher("未找到id为{0}的用户信息");
@@ -37,9 +37,10 @@ public class RequirePlaceholdersTest {
         Assertions.assertTrue(matcher.find());
         Assertions.assertEquals(matcher.group(), "{11}");
         Assertions.assertFalse(matcher.find());
+    }
 
-
-
+    @Test
+    public void testGetReplacedDescription() {
         ErrorCode entity = new ErrorCode() {
             @Override
             public String value() {
@@ -52,8 +53,11 @@ public class RequirePlaceholdersTest {
             }
         };
         Assertions.assertEquals("AABBCCDDEEFF", entity.getReplacedDescription("A", "B", "C", "D", "E", "F"));
+    }
 
-        ErrorCode entity1 = new ErrorCode() {
+    @Test
+    public void testExceptions() {
+        ErrorCode entity = new ErrorCode() {
             @Override
             public String value() {
                 return "code";
@@ -64,9 +68,7 @@ public class RequirePlaceholdersTest {
                 return "A{0}B{1}C{2}D{3}E{4}F{5}G{6}";
             }
         };
-        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> entity1.getReplacedDescription("A", "B", "C", "D", "E", "F"));
-
-        entity1.getReplacedDescription("A", "B", "C", "D", "E", "F");
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> entity.getReplacedDescription("A", "B", "C", "D", "E", "F"));
     }
 
 }

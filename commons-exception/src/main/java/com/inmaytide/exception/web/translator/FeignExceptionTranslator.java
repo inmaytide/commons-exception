@@ -16,6 +16,10 @@ import org.springframework.http.HttpStatusCode;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * @author inmaytide
+ * @since 2021/01/05
+ */
 public class FeignExceptionTranslator extends AbstractHttpExceptionTranslator {
 
     private static final Logger log = LoggerFactory.getLogger(FeignExceptionTranslator.class);

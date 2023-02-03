@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/26
  */
 public class DefaultHandlerExceptionResolver implements HandlerExceptionResolver, Ordered {

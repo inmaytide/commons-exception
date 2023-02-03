@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GlobalTest {
+public class StreamExecuteTest {
 
     @Test
     public void test() {
@@ -17,9 +17,8 @@ public class GlobalTest {
         list.add(new Operate(true));
         list.add(new Operate(false));
 
-        list.stream().map(Operate::identity).filter(Operate::getValue).findFirst();
-        list.stream().forEach(op -> System.out.println(op.getCount()));
-
+        Operate value = list.stream().map(Operate::identity).filter(Operate::getValue).findFirst().orElse(null);
+        Assertions.assertNotNull(value);
         Assertions.assertEquals(list.get(0).getCount(), 1);
         Assertions.assertEquals(list.get(1).getCount(), 1);
         Assertions.assertEquals(list.get(2).getCount(), 1);

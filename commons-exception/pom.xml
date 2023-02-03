@@ -6,7 +6,7 @@
 
     <groupId>com.inmaytide</groupId>
     <artifactId>commons-exception</artifactId>
-    <version>3.0.0-alpha.1</version>
+    <version>3.0.0</version>
 
     <properties>
         <java.version>19</java.version>

@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/27
  */
 @Configuration(proxyBeanMethods = false)

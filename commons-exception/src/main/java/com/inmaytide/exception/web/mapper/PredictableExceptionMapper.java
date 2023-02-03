@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/25
  */
 public class PredictableExceptionMapper extends AbstractThrowableMapper<Class<? extends Throwable>> {

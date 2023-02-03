@@ -11,7 +11,7 @@ import java.util.Optional;
  * 通常放在翻译器链最后<br />
  * 将不可预知的异常转换为HttpResponseException, 并在日志中输出异常详细堆栈
  *
- * @author luomiao
+ * @author inmaytide
  * @since 2020/11/26
  */
 public class UnknownExceptionTranslator implements ThrowableTranslator<HttpResponseException> {
