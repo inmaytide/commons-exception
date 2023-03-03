@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import java.io.Serial;
 
 /**
- * 请求受保护资源时提供的相关凭证错误或已过期
+ * 请求受保护资源时提供的身份凭证错误或已过期
  *
  * @author inmaytide
  * @since 2020/11/26

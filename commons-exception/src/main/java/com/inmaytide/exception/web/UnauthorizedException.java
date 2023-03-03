@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import java.io.Serial;
 
 /**
- * 请求受保护资源时未提供相关凭证
+ * 请求受保护资源时未提供身份凭证
  *
  * @author luomiao
  * @since 2020/11/30
