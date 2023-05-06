@@ -1,0 +1,3 @@
+com.inmaytide.exception.starter.config.WebExceptionHandlerAutoConfiguration
+com.inmaytide.exception.starter.config.ServletExceptionHandlerConfiguration
+com.inmaytide.exception.starter.config.ReactiveExceptionHandlerConfiguration

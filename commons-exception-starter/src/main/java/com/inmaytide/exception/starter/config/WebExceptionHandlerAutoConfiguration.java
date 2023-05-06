@@ -19,10 +19,9 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication
-@Import({ServletExceptionHandlerConfiguration.class, ReactiveExceptionHandlerConfiguration.class})
-public class WebExceptionHandlerAutoConfigure {
+public class WebExceptionHandlerAutoConfiguration {
 
-    private static final Logger log = LoggerFactory.getLogger(WebExceptionHandlerAutoConfigure.class);
+    private static final Logger log = LoggerFactory.getLogger(WebExceptionHandlerAutoConfiguration.class);
 
     private static final String CLASS_NAME_FEIGN_EX = "feign.FeignException";
 
