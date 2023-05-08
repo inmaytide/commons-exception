@@ -53,12 +53,13 @@ public class PredictableExceptionMapper extends AbstractThrowableMapper<Class<? 
 
     public PredictableExceptionMapper() {
         register(IllegalArgumentException.class, BadRequestException.class);
-        register("org.springframework.security.oauth2.common.exceptions.InvalidGrantException", BadCredentialsException.class, false);
         register("com.netflix.client.ClientException", ServiceUnavailableException.class, false);
+        register("org.springframework.security.oauth2.common.exceptions.InvalidGrantException", BadCredentialsException.class, false);
         register("org.springframework.security.oauth2.common.exceptions.InvalidTokenException", BadCredentialsException.class, false);
         register("org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionException", UnauthorizedException.class, false);
         register("org.springframework.security.oauth2.server.resource.introspection.BadOpaqueTokenException", BadCredentialsException.class, false);
         register("org.springframework.security.authentication.AuthenticationCredentialsNotFoundException", UnauthorizedException.class, false);
         register("org.springframework.security.access.AccessDeniedException", AccessDeniedException.class, false);
+        register("org.springframework.security.authentication.InsufficientAuthenticationException", AccessDeniedException.class, false);
     }
 }
