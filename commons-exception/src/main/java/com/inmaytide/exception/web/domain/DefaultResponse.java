@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 import java.io.Serial;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -97,6 +98,7 @@ public class DefaultResponse implements Response {
     @Override
     public String toString() {
         String values = Stream.of(DefaultResponse.class.getDeclaredFields())
+                .filter(e -> !Modifier.isStatic(e.getModifiers()))
                 .peek(AccessibleObject::trySetAccessible)
                 .map(this::fieldValue)
                 .filter(Optional::isPresent)
@@ -114,6 +116,9 @@ public class DefaultResponse implements Response {
             value = converted.value();
         }
         if (value instanceof Collection<?> converted) {
+            if (converted.isEmpty()) {
+                return Optional.empty();
+            }
             String values = converted.stream().map(e -> Objects.toString(e, "")).map(s -> "\"" + s + "\"").collect(Collectors.joining(", "));
             value = "[" + values + "]";
         }

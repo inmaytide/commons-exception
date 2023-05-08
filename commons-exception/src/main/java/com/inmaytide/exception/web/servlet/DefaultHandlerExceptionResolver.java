@@ -34,7 +34,6 @@ public class DefaultHandlerExceptionResolver implements HandlerExceptionResolver
         String path = request.getRequestURL().toString();
         log.error("Handing error: {}, {}, {} {}", e.getClass().getName(), e.getMessage(), request.getMethod(), path);
         if (log.isDebugEnabled()) {
-            e.printStackTrace();
             log.error("Exception stack trace: ", e);
         }
         HttpResponseException exception = translator.translate(e).orElseGet(() -> new HttpResponseException(e));
