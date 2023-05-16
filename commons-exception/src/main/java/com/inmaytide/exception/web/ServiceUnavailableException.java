@@ -17,10 +17,14 @@ public class ServiceUnavailableException extends HttpResponseException {
     @Serial
     private static final long serialVersionUID = -372994981996874593L;
 
-    private static final ErrorCode DEFAULT_CODE = new DefaultErrorCode("exception_service_unavailable", "请求的服务暂时无法访问");
+    private static final ErrorCode DEFAULT_CODE = new DefaultErrorCode("exception_service_unavailable", "服务 {0} 暂时无法访问");
+
+    public ServiceUnavailableException(String service) {
+        super(HttpStatus.SERVICE_UNAVAILABLE, DEFAULT_CODE, service);
+    }
 
     public ServiceUnavailableException() {
-        super(HttpStatus.SERVICE_UNAVAILABLE, DEFAULT_CODE);
+        super(HttpStatus.SERVICE_UNAVAILABLE, DEFAULT_CODE, "unknown");
     }
 
     public ServiceUnavailableException(ErrorCode code, String... placeholders) {

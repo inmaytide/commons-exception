@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inmaytide.exception.translator.ThrowableMapper;
 import com.inmaytide.exception.util.ApplicationContextHolder;
 import com.inmaytide.exception.web.HttpResponseException;
+import com.inmaytide.exception.web.ServiceUnavailableException;
 import com.inmaytide.exception.web.domain.DefaultErrorCode;
 import com.inmaytide.exception.web.domain.DefaultResponse;
 import com.inmaytide.exception.web.mapper.ResponseStatusExceptionMapper;
@@ -13,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,9 +43,16 @@ public class FeignExceptionTranslator extends AbstractHttpExceptionTranslator {
     @Override
     protected Optional<HttpResponseException> execute(Throwable e) {
         if (e instanceof FeignException exception) {
+            if (exception instanceof FeignException.ServiceUnavailable serviceUnavailable) {
+                try {
+                    return Optional.of(new ServiceUnavailableException(new URL(serviceUnavailable.request().url()).getHost()));
+                } catch (MalformedURLException ex) {
+                    LOG.error("Failed to get service name from the original exception, Cause by: ", e);
+                }
+            }
             return exception.responseBody()
                     .flatMap(this::transfer)
-                    .map(res -> new HttpResponseException(HttpStatus.resolve(exception.status()), new DefaultErrorCode(res.getCode(), res.getMessage()), e, res.getPlaceholders().toArray(new String[0])))
+                    .map(res -> new HttpResponseException(HttpStatus.resolve(exception.status()), new DefaultErrorCode(res.getCode(), res.getMessage()), e, res.getPlaceholders() == null ? new String[0] : res.getPlaceholders().toArray(new String[0])))
                     .or(() -> throwableMapper.support(HttpStatus.resolve(exception.status())).map(super::createInstance));
         }
         return Optional.empty();
