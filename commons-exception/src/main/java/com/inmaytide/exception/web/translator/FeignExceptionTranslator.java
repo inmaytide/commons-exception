@@ -36,18 +36,15 @@ public class FeignExceptionTranslator extends AbstractHttpExceptionTranslator {
 
     @Override
     protected Optional<HttpResponseException> execute(Throwable e) {
-        if (e instanceof FeignException) {
-            if (e instanceof FeignException.BadRequest exception) {
-                if (exception.responseBody().isPresent()) {
-                    try {
-                        DefaultResponse response = ApplicationContextHolder.getInstance().getBean(ObjectMapper.class).readerFor(DefaultResponse.class).readValue(exception.responseBody().get().array());
-                        return Optional.of(new HttpResponseException(HttpStatus.resolve(exception.status()), new DefaultErrorCode(response.getCode(), response.getMessage()), e, response.getPlaceholders().toArray(new String[0])));
-                    } catch (Exception ignored) {
+        if (e instanceof FeignException exception) {
+            if (exception.responseBody().isPresent()) {
+                try {
+                    DefaultResponse response = ApplicationContextHolder.getInstance().getBean(ObjectMapper.class).readerFor(DefaultResponse.class).readValue(exception.responseBody().get().array());
+                    return Optional.of(new HttpResponseException(HttpStatus.resolve(exception.status()), new DefaultErrorCode(response.getCode(), response.getMessage()), e, response.getPlaceholders().toArray(new String[0])));
+                } catch (Exception ignored) {
 
-                    }
                 }
             }
-            FeignException exception = (FeignException) e;
             return throwableMapper.support(HttpStatus.resolve(exception.status())).map(super::createInstance);
         }
         return Optional.empty();
