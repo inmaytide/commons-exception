@@ -120,7 +120,7 @@ public class DefaultResponse implements Response {
                 return Optional.empty();
             }
             String values = converted.stream().map(e -> Objects.toString(e, "")).map(s -> "\"" + s + "\"").collect(Collectors.joining(", "));
-            value = "[" + values + "]";
+            return Optional.of(String.format("\"%s\": [%s]", field.getName(), values));
         }
         return Optional.of(String.format("\"%s\": \"%s\"", field.getName(), value));
     }

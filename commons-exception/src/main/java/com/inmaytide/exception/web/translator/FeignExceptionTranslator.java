@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
+import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -22,9 +23,11 @@ import java.util.Optional;
  */
 public class FeignExceptionTranslator extends AbstractHttpExceptionTranslator {
 
-    private static final Logger log = LoggerFactory.getLogger(FeignExceptionTranslator.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FeignExceptionTranslator.class);
 
     private final ThrowableMapper<HttpStatusCode, Class<? extends HttpResponseException>> throwableMapper;
+
+    private ObjectMapper objectMapper;
 
     public FeignExceptionTranslator() {
         throwableMapper = ResponseStatusExceptionMapper.getInstance();
@@ -37,15 +40,19 @@ public class FeignExceptionTranslator extends AbstractHttpExceptionTranslator {
     @Override
     protected Optional<HttpResponseException> execute(Throwable e) {
         if (e instanceof FeignException exception) {
-            if (exception.responseBody().isPresent()) {
-                try {
-                    DefaultResponse response = ApplicationContextHolder.getInstance().getBean(ObjectMapper.class).readerFor(DefaultResponse.class).readValue(exception.responseBody().get().array());
-                    return Optional.of(new HttpResponseException(HttpStatus.resolve(exception.status()), new DefaultErrorCode(response.getCode(), response.getMessage()), e, response.getPlaceholders().toArray(new String[0])));
-                } catch (Exception ignored) {
+            return exception.responseBody()
+                    .flatMap(this::transfer)
+                    .map(res -> new HttpResponseException(HttpStatus.resolve(exception.status()), new DefaultErrorCode(res.getCode(), res.getMessage()), e, res.getPlaceholders().toArray(new String[0])))
+                    .or(() -> throwableMapper.support(HttpStatus.resolve(exception.status())).map(super::createInstance));
+        }
+        return Optional.empty();
+    }
 
-                }
-            }
-            return throwableMapper.support(HttpStatus.resolve(exception.status())).map(super::createInstance);
+    public Optional<DefaultResponse> transfer(ByteBuffer buffer) {
+        try {
+            return Optional.of(getObjectMapper().readValue(buffer.array(), DefaultResponse.class));
+        } catch (Exception e) {
+            LOG.error("Failed to convert error response from the original exception, Cause by: ", e);
         }
         return Optional.empty();
     }
@@ -53,5 +60,12 @@ public class FeignExceptionTranslator extends AbstractHttpExceptionTranslator {
     @Override
     public int getOrder() {
         return 40;
+    }
+
+    public ObjectMapper getObjectMapper() {
+        if (objectMapper == null) {
+            objectMapper = ApplicationContextHolder.getInstance().getBean(ObjectMapper.class);
+        }
+        return objectMapper;
     }
 }
