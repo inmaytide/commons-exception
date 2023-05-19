@@ -33,6 +33,7 @@ public class WebExceptionHandlerAutoConfiguration {
         chain.addTranslator(new ResponseStatusExceptionTranslator());
         chain.addTranslator(new PredictableExceptionTranslator());
         chain.addTranslator(new UnknownExceptionTranslator());
+        chain.addTranslator(new MethodArgumentNotValidExceptionTranslator());
         try {
             Class.forName(CLASS_NAME_FEIGN_EX);
             chain.addTranslator(new FeignExceptionTranslator());
