@@ -1,5 +1,6 @@
 package com.inmaytide.exception.translator;
 
+import org.slf4j.Logger;
 import org.springframework.core.Ordered;
 
 import java.util.Optional;
@@ -11,6 +12,8 @@ import java.util.Optional;
 public interface ThrowableTranslator<T extends Throwable> extends Ordered, Comparable<ThrowableTranslator<T>> {
 
     Optional<T> translate(Throwable throwable);
+
+    Logger getLogger();
 
     @Override
     default int compareTo(ThrowableTranslator<T> o) {

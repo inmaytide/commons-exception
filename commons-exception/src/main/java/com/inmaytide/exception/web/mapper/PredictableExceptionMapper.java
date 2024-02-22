@@ -1,5 +1,6 @@
 package com.inmaytide.exception.web.mapper;
 
+import com.inmaytide.exception.translator.ThrowableMapper;
 import com.inmaytide.exception.web.*;
 import org.springframework.util.ClassUtils;
 
@@ -11,9 +12,23 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author inmaytide
  * @since 2020/11/25
  */
-public class PredictableExceptionMapper extends AbstractThrowableMapper<Class<? extends Throwable>> {
+public class PredictableExceptionMapper implements ThrowableMapper<Class<? extends Throwable>, Class<? extends HttpResponseException>> {
 
     private static final Map<Class<? extends Throwable>, Class<? extends HttpResponseException>> CONTAINER = new ConcurrentHashMap<>();
+
+    public static final PredictableExceptionMapper DEFAULT_INSTANT = new PredictableExceptionMapper();
+
+    public PredictableExceptionMapper() {
+        register(IllegalArgumentException.class, BadRequestException.class);
+        register("com.netflix.client.ClientException", ServiceUnavailableException.class, false);
+        register("org.springframework.security.oauth2.common.exceptions.InvalidGrantException", BadCredentialsException.class, false);
+        register("org.springframework.security.oauth2.common.exceptions.InvalidTokenException", BadCredentialsException.class, false);
+        register("org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionException", UnauthorizedException.class, false);
+        register("org.springframework.security.oauth2.server.resource.introspection.BadOpaqueTokenException", BadCredentialsException.class, false);
+        register("org.springframework.security.authentication.AuthenticationCredentialsNotFoundException", UnauthorizedException.class, false);
+        register("org.springframework.security.access.AccessDeniedException", AccessDeniedException.class, false);
+        register("org.springframework.security.authentication.InsufficientAuthenticationException", UnauthorizedException.class, false);
+    }
 
     @Override
     public void register(String key, Class<? extends HttpResponseException> target) {
@@ -47,19 +62,7 @@ public class PredictableExceptionMapper extends AbstractThrowableMapper<Class<? 
     }
 
     @Override
-    protected Map<Class<? extends Throwable>, Class<? extends HttpResponseException>> getContainer() {
+    public Map<Class<? extends Throwable>, Class<? extends HttpResponseException>> getContainer() {
         return CONTAINER;
-    }
-
-    public PredictableExceptionMapper() {
-        register(IllegalArgumentException.class, BadRequestException.class);
-        register("com.netflix.client.ClientException", ServiceUnavailableException.class, false);
-        register("org.springframework.security.oauth2.common.exceptions.InvalidGrantException", BadCredentialsException.class, false);
-        register("org.springframework.security.oauth2.common.exceptions.InvalidTokenException", BadCredentialsException.class, false);
-        register("org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionException", UnauthorizedException.class, false);
-        register("org.springframework.security.oauth2.server.resource.introspection.BadOpaqueTokenException", BadCredentialsException.class, false);
-        register("org.springframework.security.authentication.AuthenticationCredentialsNotFoundException", UnauthorizedException.class, false);
-        register("org.springframework.security.access.AccessDeniedException", AccessDeniedException.class, false);
-        register("org.springframework.security.authentication.InsufficientAuthenticationException", UnauthorizedException.class, false);
     }
 }

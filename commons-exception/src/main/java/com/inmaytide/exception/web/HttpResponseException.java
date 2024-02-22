@@ -29,7 +29,7 @@ public class HttpResponseException extends RuntimeException {
     private final Instant timestamp;
 
     /**
-     * Http状态吗, 默认 {@link HttpResponseException#DEFAULT_STATUS}
+     * Http状态码, 默认 {@link HttpResponseException#DEFAULT_STATUS}
      */
     private final HttpStatus status;
 

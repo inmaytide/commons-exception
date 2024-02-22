@@ -1,6 +1,7 @@
 package com.inmaytide.exception.web.translator;
 
 import com.inmaytide.exception.web.HttpResponseException;
+import org.slf4j.Logger;
 
 import java.util.Optional;
 
@@ -8,7 +9,7 @@ import java.util.Optional;
  * @author inmaytide
  * @since 2020/11/26
  */
-public class HttpResponseExceptionTranslator extends AbstractHttpExceptionTranslator {
+public class HttpResponseExceptionTranslator implements HttpExceptionTranslator {
 
     public static final int ORDER = 10;
 
@@ -25,4 +26,8 @@ public class HttpResponseExceptionTranslator extends AbstractHttpExceptionTransl
         return ORDER;
     }
 
+    @Override
+    public Logger getLogger() {
+        return null;
+    }
 }

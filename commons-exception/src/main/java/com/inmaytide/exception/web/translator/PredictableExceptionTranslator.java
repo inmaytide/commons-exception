@@ -13,7 +13,7 @@ import java.util.Optional;
  * @author inmaytide
  * @since 2020/11/25
  */
-public class PredictableExceptionTranslator extends AbstractHttpExceptionTranslator {
+public class PredictableExceptionTranslator implements HttpExceptionTranslator {
 
     public static final int ORDER = 30;
 
@@ -22,7 +22,7 @@ public class PredictableExceptionTranslator extends AbstractHttpExceptionTransla
     private final ThrowableMapper<Class<? extends Throwable>, Class<? extends HttpResponseException>> throwableMapper;
 
     public PredictableExceptionTranslator() {
-        throwableMapper = new PredictableExceptionMapper();
+        throwableMapper = PredictableExceptionMapper.DEFAULT_INSTANT;
     }
 
     private PredictableExceptionTranslator(ThrowableMapper<Class<? extends Throwable>, Class<? extends HttpResponseException>> throwableMapper) {
@@ -31,11 +31,11 @@ public class PredictableExceptionTranslator extends AbstractHttpExceptionTransla
 
     @Override
     public Optional<HttpResponseException> execute(Throwable e) {
-        return throwableMapper.support(e.getClass()).map(cls -> createInstance(cls, e));
+        return throwableMapper.map(e.getClass()).map(cls -> createExceptionInstance(cls, e));
     }
 
     @Override
-    protected Logger getLogger() {
+    public Logger getLogger() {
         return log;
     }
 

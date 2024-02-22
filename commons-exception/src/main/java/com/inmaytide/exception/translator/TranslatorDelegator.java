@@ -1,5 +1,8 @@
 package com.inmaytide.exception.translator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +13,8 @@ import java.util.stream.Collectors;
  * @since 2020/11/26
  */
 public class TranslatorDelegator<T extends Throwable> implements ThrowableTranslator<T> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(TranslatorDelegator.class);
 
     private List<ThrowableTranslator<T>> translators;
 
@@ -25,7 +30,8 @@ public class TranslatorDelegator<T extends Throwable> implements ThrowableTransl
             translators = translators.stream().sorted().collect(Collectors.toList());
             innerSorted = true;
         }
-        return translators.stream().map(translator -> translator.translate(throwable))
+        return translators.stream()
+                .map(translator -> translator.translate(throwable))
                 .filter(Optional::isPresent)
                 .findFirst()
                 .orElse(Optional.empty());
@@ -39,6 +45,11 @@ public class TranslatorDelegator<T extends Throwable> implements ThrowableTransl
     @Override
     public int getOrder() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Logger getLogger() {
+        return LOG;
     }
 
 }

@@ -25,6 +25,11 @@ public class UnknownExceptionTranslator implements ThrowableTranslator<HttpRespo
     }
 
     @Override
+    public Logger getLogger() {
+        return log;
+    }
+
+    @Override
     public int getOrder() {
         return Integer.MAX_VALUE;
     }

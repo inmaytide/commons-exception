@@ -1,5 +1,6 @@
 package com.inmaytide.exception.web.mapper;
 
+import com.inmaytide.exception.translator.ThrowableMapper;
 import com.inmaytide.exception.web.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -11,27 +12,24 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author inmaytide
  * @since 2020/11/26
  */
-public class ResponseStatusExceptionMapper extends AbstractThrowableMapper<HttpStatusCode> {
+public class ResponseStatusExceptionMapper implements ThrowableMapper<HttpStatusCode, Class<? extends HttpResponseException>> {
 
     private static final Map<HttpStatusCode, Class<? extends HttpResponseException>> CONTAINER = new ConcurrentHashMap<>();
 
-    private static final ResponseStatusExceptionMapper INSTANT = new ResponseStatusExceptionMapper();
+    public static final ResponseStatusExceptionMapper DEFAULT_INSTANT = new ResponseStatusExceptionMapper();
+
+    private ResponseStatusExceptionMapper() {
+        register(HttpStatus.BAD_REQUEST, BadRequestException.class);
+        register(HttpStatus.UNAUTHORIZED, UnauthorizedException.class);
+        register(HttpStatus.FORBIDDEN, AccessDeniedException.class);
+        register(HttpStatus.NOT_FOUND, PathNotFoundException.class);
+        register(HttpStatus.SERVICE_UNAVAILABLE, ServiceUnavailableException.class);
+    }
 
     @Override
-    protected Map<HttpStatusCode, Class<? extends HttpResponseException>> getContainer() {
+    public Map<HttpStatusCode, Class<? extends HttpResponseException>> getContainer() {
         return CONTAINER;
     }
 
-    private ResponseStatusExceptionMapper() {
-        register(HttpStatus.NOT_FOUND, PathNotFoundException.class);
-        register(HttpStatus.UNAUTHORIZED, UnauthorizedException.class);
-        register(HttpStatus.FORBIDDEN, AccessDeniedException.class);
-        register(HttpStatus.SERVICE_UNAVAILABLE, ServiceUnavailableException.class);
-        register(HttpStatus.BAD_REQUEST, BadRequestException.class);
-    }
-
-    public static ResponseStatusExceptionMapper getInstance() {
-        return INSTANT;
-    }
 
 }
