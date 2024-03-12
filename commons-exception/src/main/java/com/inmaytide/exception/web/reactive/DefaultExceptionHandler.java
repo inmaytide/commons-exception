@@ -4,6 +4,7 @@ import com.inmaytide.exception.translator.ThrowableTranslator;
 import com.inmaytide.exception.web.HttpResponseException;
 import com.inmaytide.exception.web.PathNotFoundException;
 import com.inmaytide.exception.web.domain.DefaultResponse;
+import com.inmaytide.exception.web.translator.HttpExceptionTranslatorDelegator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -24,7 +25,7 @@ import reactor.core.publisher.Mono;
  * @author inmaytide
  * @since 2020/11/25
  */
-public record DefaultExceptionHandler(ThrowableTranslator<HttpResponseException> translator) implements WebExceptionHandler, Ordered {
+public record DefaultExceptionHandler(HttpExceptionTranslatorDelegator translator) implements WebExceptionHandler, Ordered {
 
     private static final Logger log = LoggerFactory.getLogger(DefaultExceptionHandler.class);
 

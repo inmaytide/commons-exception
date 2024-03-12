@@ -6,6 +6,7 @@ import org.springframework.util.ClassUtils;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -14,11 +15,12 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class PredictableExceptionMapper implements ThrowableMapper<Class<? extends Throwable>, Class<? extends HttpResponseException>> {
 
-    private static final Map<Class<? extends Throwable>, Class<? extends HttpResponseException>> CONTAINER = new ConcurrentHashMap<>();
-
     public static final PredictableExceptionMapper DEFAULT_INSTANT = new PredictableExceptionMapper();
 
+    private final Map<Class<? extends Throwable>, Class<? extends HttpResponseException>> relationships;
+
     public PredictableExceptionMapper() {
+        this.relationships = new ConcurrentHashMap<>();
         register(IllegalArgumentException.class, BadRequestException.class);
         register("com.netflix.client.ClientException", ServiceUnavailableException.class, false);
         register("org.springframework.security.oauth2.common.exceptions.InvalidGrantException", BadCredentialsException.class, false);
@@ -31,6 +33,27 @@ public class PredictableExceptionMapper implements ThrowableMapper<Class<? exten
     }
 
     @Override
+    public Optional<Class<? extends HttpResponseException>> map(Class<? extends Throwable> key) {
+        if (key == null) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(relationships.get(key));
+    }
+
+    @Override
+    public void register(Class<? extends Throwable> key, Class<? extends HttpResponseException> target) {
+        if (relationships.containsKey(Objects.requireNonNull(key))) {
+            throw new IllegalArgumentException(String.format("The mapping relationship already exists, %s", key));
+        }
+        relationships.put(key, Objects.requireNonNull(target));
+    }
+
+    @Override
+    public void replace(Class<? extends Throwable> key, Class<? extends HttpResponseException> target) {
+        relationships.replace(Objects.requireNonNull(key), Objects.requireNonNull(target));
+    }
+
+    @Override
     public void register(String key, Class<? extends HttpResponseException> target) {
         register(key, target, true);
     }
@@ -38,7 +61,7 @@ public class PredictableExceptionMapper implements ThrowableMapper<Class<? exten
     private void register(String className, Class<? extends HttpResponseException> target, boolean classRequireFound) {
         try {
             Class<?> cls = ClassUtils.forName(className, ClassUtils.getDefaultClassLoader());
-            if (isAssignableFromThrowable(cls)) {
+            if (ClassUtils.isAssignable(Throwable.class, cls)) {
                 register((Class<? extends Throwable>) cls, target);
             } else {
                 throw new IllegalArgumentException(String.format("%s was not assignable from Throwable", className));
@@ -50,19 +73,4 @@ public class PredictableExceptionMapper implements ThrowableMapper<Class<? exten
         }
     }
 
-    private boolean isAssignableFromThrowable(Class<?> cls) {
-        if (cls == null) {
-            return false;
-        }
-        Class<?> superclass = cls.getSuperclass();
-        if (Objects.equals(superclass, Throwable.class)) {
-            return true;
-        }
-        return isAssignableFromThrowable(superclass);
-    }
-
-    @Override
-    public Map<Class<? extends Throwable>, Class<? extends HttpResponseException>> getContainer() {
-        return CONTAINER;
-    }
 }

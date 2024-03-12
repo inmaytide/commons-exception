@@ -22,10 +22,10 @@ public class PredictableExceptionTranslator implements HttpExceptionTranslator {
     private final ThrowableMapper<Class<? extends Throwable>, Class<? extends HttpResponseException>> throwableMapper;
 
     public PredictableExceptionTranslator() {
-        throwableMapper = PredictableExceptionMapper.DEFAULT_INSTANT;
+        this(PredictableExceptionMapper.DEFAULT_INSTANT);
     }
 
-    private PredictableExceptionTranslator(ThrowableMapper<Class<? extends Throwable>, Class<? extends HttpResponseException>> throwableMapper) {
+    public PredictableExceptionTranslator(ThrowableMapper<Class<? extends Throwable>, Class<? extends HttpResponseException>> throwableMapper) {
         this.throwableMapper = Objects.requireNonNull(throwableMapper);
     }
 

@@ -3,6 +3,7 @@ package com.inmaytide.exception.web.servlet;
 import com.inmaytide.exception.web.HttpResponseException;
 import com.inmaytide.exception.web.domain.DefaultResponse;
 import com.inmaytide.exception.translator.ThrowableTranslator;
+import com.inmaytide.exception.web.translator.HttpExceptionTranslatorDelegator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -19,15 +20,10 @@ import java.io.OutputStream;
  * @author inmaytide
  * @since 2020/11/26
  */
-public class DefaultHandlerExceptionResolver implements HandlerExceptionResolver, Ordered {
+public record DefaultHandlerExceptionResolver(HttpExceptionTranslatorDelegator translator) implements HandlerExceptionResolver, Ordered {
 
     private static final Logger log = LoggerFactory.getLogger(DefaultHandlerExceptionResolver.class);
 
-    private final ThrowableTranslator<HttpResponseException> translator;
-
-    public DefaultHandlerExceptionResolver(ThrowableTranslator<HttpResponseException> translator) {
-        this.translator = translator;
-    }
 
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object o, Exception e) {
@@ -53,4 +49,5 @@ public class DefaultHandlerExceptionResolver implements HandlerExceptionResolver
     public int getOrder() {
         return -1000;
     }
+
 }
