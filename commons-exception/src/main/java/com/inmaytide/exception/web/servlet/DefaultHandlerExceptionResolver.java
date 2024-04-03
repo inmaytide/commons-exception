@@ -2,7 +2,6 @@ package com.inmaytide.exception.web.servlet;
 
 import com.inmaytide.exception.web.HttpResponseException;
 import com.inmaytide.exception.web.domain.DefaultResponse;
-import com.inmaytide.exception.translator.ThrowableTranslator;
 import com.inmaytide.exception.web.translator.HttpExceptionTranslatorDelegator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,7 +46,7 @@ public record DefaultHandlerExceptionResolver(HttpExceptionTranslatorDelegator t
 
     @Override
     public int getOrder() {
-        return -1000;
+        return Integer.MIN_VALUE;
     }
 
 }

@@ -1,7 +1,5 @@
 package com.inmaytide.exception.starter.config;
 
-import com.inmaytide.exception.translator.ThrowableTranslator;
-import com.inmaytide.exception.web.HttpResponseException;
 import com.inmaytide.exception.web.reactive.DefaultExceptionHandler;
 import com.inmaytide.exception.web.translator.HttpExceptionTranslatorDelegator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;

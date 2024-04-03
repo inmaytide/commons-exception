@@ -23,14 +23,13 @@ public class WebExceptionHandlerAutoConfiguration {
 
     private static final Logger log = LoggerFactory.getLogger(WebExceptionHandlerAutoConfiguration.class);
 
-    private static final String CLASS_NAME_FEIGN_EX = "feign.FeignException";
-
     @Bean
     public HttpResponseException httpResponseException() {
         return new HttpResponseException();
     }
 
     @Bean
+    @ConditionalOnClass(name = "org.springframework.web.bind.MethodArgumentNotValidException")
     public MethodArgumentNotValidExceptionTranslator methodArgumentNotValidExceptionTranslator() {
         return new MethodArgumentNotValidExceptionTranslator();
     }
@@ -48,14 +47,14 @@ public class WebExceptionHandlerAutoConfiguration {
     }
 
     @Bean
-    public UnknownExceptionTranslator unknownExceptionTranslator() {
-        return new UnknownExceptionTranslator();
+    @ConditionalOnClass(name = "feign.FeignException")
+    public FeignExceptionTranslator feignExceptionTranslator() {
+        return new FeignExceptionTranslator();
     }
 
     @Bean
-    @ConditionalOnClass(name = {CLASS_NAME_FEIGN_EX})
-    public FeignExceptionTranslator feignExceptionTranslator() {
-        return new FeignExceptionTranslator();
+    public UnknownExceptionTranslator unknownExceptionTranslator() {
+        return new UnknownExceptionTranslator();
     }
 
 

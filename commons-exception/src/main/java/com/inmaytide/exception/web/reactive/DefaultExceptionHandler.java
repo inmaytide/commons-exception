@@ -1,6 +1,5 @@
 package com.inmaytide.exception.web.reactive;
 
-import com.inmaytide.exception.translator.ThrowableTranslator;
 import com.inmaytide.exception.web.HttpResponseException;
 import com.inmaytide.exception.web.PathNotFoundException;
 import com.inmaytide.exception.web.domain.DefaultResponse;

@@ -24,7 +24,7 @@ public class ResponseStatusExceptionTranslator implements HttpExceptionTranslato
     private final ThrowableMapper<HttpStatusCode, Class<? extends HttpResponseException>> throwableMapper;
 
     public ResponseStatusExceptionTranslator() {
-        throwableMapper = ResponseStatusExceptionMapper.DEFAULT_INSTANT;
+        this(ResponseStatusExceptionMapper.DEFAULT_INSTANT);
     }
 
     public ResponseStatusExceptionTranslator(ThrowableMapper<HttpStatusCode, Class<? extends HttpResponseException>> throwableMapper) {
