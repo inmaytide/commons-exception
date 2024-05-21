@@ -1,5 +1,6 @@
 package com.inmaytide.exception.starter.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inmaytide.exception.translator.ThrowableTranslator;
 import com.inmaytide.exception.web.HttpResponseException;
 import com.inmaytide.exception.web.translator.*;
@@ -48,8 +49,8 @@ public class WebExceptionHandlerAutoConfiguration {
 
     @Bean
     @ConditionalOnClass(name = "feign.FeignException")
-    public FeignExceptionTranslator feignExceptionTranslator() {
-        return new FeignExceptionTranslator();
+    public FeignExceptionTranslator feignExceptionTranslator(ObjectMapper objectMapper) {
+        return new FeignExceptionTranslator(objectMapper);
     }
 
     @Bean

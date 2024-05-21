@@ -29,14 +29,19 @@ public class FeignExceptionTranslator implements HttpExceptionTranslator {
 
     private final ThrowableMapper<HttpStatusCode, Class<? extends HttpResponseException>> throwableMapper;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     public FeignExceptionTranslator() {
-        throwableMapper = ResponseStatusExceptionMapper.DEFAULT_INSTANT;
+        this(new ObjectMapper());
     }
 
-    public FeignExceptionTranslator(ThrowableMapper<HttpStatusCode, Class<? extends HttpResponseException>> throwableMapper) {
+    public FeignExceptionTranslator(ObjectMapper objectMapper) {
+        this(objectMapper, ResponseStatusExceptionMapper.DEFAULT_INSTANT);
+    }
+
+    public FeignExceptionTranslator(ObjectMapper objectMapper, ThrowableMapper<HttpStatusCode, Class<? extends HttpResponseException>> throwableMapper) {
         this.throwableMapper = Objects.requireNonNull(throwableMapper);
+        this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
     @Override
