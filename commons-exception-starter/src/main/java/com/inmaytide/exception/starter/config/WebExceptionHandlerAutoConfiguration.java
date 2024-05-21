@@ -25,8 +25,8 @@ public class WebExceptionHandlerAutoConfiguration {
     private static final Logger log = LoggerFactory.getLogger(WebExceptionHandlerAutoConfiguration.class);
 
     @Bean
-    public HttpResponseException httpResponseException() {
-        return new HttpResponseException();
+    public HttpResponseExceptionTranslator httpResponseExceptionTranslator() {
+        return new HttpResponseExceptionTranslator();
     }
 
     @Bean
