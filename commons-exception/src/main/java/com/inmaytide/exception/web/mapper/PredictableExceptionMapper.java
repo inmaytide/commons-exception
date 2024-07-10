@@ -30,6 +30,7 @@ public class PredictableExceptionMapper implements ThrowableMapper<Class<? exten
         register("org.springframework.security.authentication.AuthenticationCredentialsNotFoundException", UnauthorizedException.class, false);
         register("org.springframework.security.access.AccessDeniedException", AccessDeniedException.class, false);
         register("org.springframework.security.authentication.InsufficientAuthenticationException", UnauthorizedException.class, false);
+        register("org.springframework.web.servlet.NoHandlerFoundException", PathNotFoundException.class, false);
     }
 
     @Override
