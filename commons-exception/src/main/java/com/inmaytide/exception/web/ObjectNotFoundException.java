@@ -5,6 +5,7 @@ import com.inmaytide.exception.web.domain.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 import java.io.Serial;
+import java.util.Objects;
 
 /**
  * 请求的数据对象不存在或已删除
@@ -29,6 +30,10 @@ public class ObjectNotFoundException extends HttpResponseException {
 
     public ObjectNotFoundException(String id) {
         super(HttpStatus.NOT_FOUND, DEFAULT_CODE, id);
+    }
+
+    public ObjectNotFoundException(Long id) {
+        this(Objects.toString(id, "NULL"));
     }
 
     public ObjectNotFoundException(Throwable cause) {

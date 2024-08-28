@@ -23,7 +23,6 @@ public record DefaultHandlerExceptionResolver(HttpExceptionTranslatorDelegator t
 
     private static final Logger log = LoggerFactory.getLogger(DefaultHandlerExceptionResolver.class);
 
-
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object o, Exception e) {
         String path = request.getRequestURL().toString();

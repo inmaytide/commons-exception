@@ -20,7 +20,7 @@ public class UnknownExceptionTranslator implements ThrowableTranslator<HttpRespo
 
     @Override
     public Optional<HttpResponseException> translate(Throwable e) {
-        log.error("Unknown exception: ", e);
+        log.error("Unpredictable Exception: ", e);
         return Optional.of(new HttpResponseException(e));
     }
 

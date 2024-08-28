@@ -13,8 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.Objects;
 import java.util.Optional;
@@ -48,11 +47,7 @@ public class FeignExceptionTranslator implements HttpExceptionTranslator {
     public Optional<HttpResponseException> execute(Throwable e) {
         if (e instanceof FeignException exception) {
             if (exception instanceof FeignException.ServiceUnavailable serviceUnavailable) {
-                try {
-                    return Optional.of(new ServiceUnavailableException(new URL(serviceUnavailable.request().url()).getHost()));
-                } catch (MalformedURLException ex) {
-                    LOG.error("Failed to get service name from the original exception, Cause by: ", e);
-                }
+                return Optional.of(new ServiceUnavailableException(URI.create(serviceUnavailable.request().url()).getHost()));
             }
             return exception.responseBody()
                     .flatMap(this::transfer)
