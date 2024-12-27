@@ -54,6 +54,12 @@ public class WebExceptionHandlerAutoConfiguration {
     }
 
     @Bean
+    @ConditionalOnClass(name = "org.springframework.web.reactive.function.client.WebClientResponseException")
+    public WebClientResponseExceptionTranslator webClientResponseExceptionTranslator(ObjectMapper objectMapper) {
+        return new WebClientResponseExceptionTranslator(objectMapper);
+    }
+
+    @Bean
     public UnknownExceptionTranslator unknownExceptionTranslator() {
         return new UnknownExceptionTranslator();
     }
