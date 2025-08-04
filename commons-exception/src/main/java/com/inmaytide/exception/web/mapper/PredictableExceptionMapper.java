@@ -54,11 +54,6 @@ public class PredictableExceptionMapper implements ThrowableMapper<Class<? exten
         relationships.replace(Objects.requireNonNull(key), Objects.requireNonNull(target));
     }
 
-    @Override
-    public void register(String key, Class<? extends HttpResponseException> target) {
-        register(key, target, true);
-    }
-
     private void register(String className, Class<? extends HttpResponseException> target, boolean classRequireFound) {
         try {
             Class<?> cls = ClassUtils.forName(className, ClassUtils.getDefaultClassLoader());
